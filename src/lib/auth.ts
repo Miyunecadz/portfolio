@@ -32,9 +32,12 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user) => {
-          const allowedEmail = process.env.ADMIN_EMAIL
-          if (allowedEmail && user.email !== allowedEmail) {
-            throw new Error("Unauthorized: not the admin email")
+          const allowedEmails = process.env.ADMIN_EMAIL
+            ?.split(",")
+            .map((e) => e.trim())
+            .filter(Boolean) ?? []
+          if (allowedEmails.length > 0 && !allowedEmails.includes(user.email)) {
+            throw new Error("Unauthorized: not an authorized admin email")
           }
         },
       },
