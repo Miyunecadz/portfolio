@@ -2,11 +2,17 @@ import "server-only"
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { db } from "@/db"
+import * as authSchema from "@/db/schema/auth"
+import * as appSchema from "@/db/schema/app"
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     usePlural: true,
+    schema: {
+      ...authSchema,
+      ...appSchema,
+    },
   }),
   socialProviders: {
     google: {
