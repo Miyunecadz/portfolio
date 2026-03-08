@@ -10,6 +10,7 @@ import {
   ChatCircleText,
   GraduationCap,
   Images,
+  UserCircle,
   PaintBrush,
   GithubLogo,
   LinkedinLogo,
@@ -44,6 +45,7 @@ const navItems: NavItem[] = [
   { href: "/admin/references", label: "References", icon: ChatCircleText, group: "Content" },
   { href: "/admin/education", label: "Education", icon: GraduationCap, group: "Content" },
   { href: "/admin/media", label: "Media", icon: Images, group: "Content" },
+  { href: "/admin/profile", label: "Profile", icon: UserCircle, group: "Content" },
   // Appearance
   { href: "/admin/appearance", label: "Theme", icon: PaintBrush, group: "Appearance" },
   // Integrations
