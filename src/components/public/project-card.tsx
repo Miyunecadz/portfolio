@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 
 interface ProjectCardProps {
   title: string
@@ -10,6 +11,7 @@ interface ProjectCardProps {
   techStackTags: string[]
   thumbnail: string | null
   isFeatured: boolean
+  className?: string
 }
 
 export function ProjectCard({
@@ -19,10 +21,11 @@ export function ProjectCard({
   techStackTags,
   thumbnail,
   isFeatured,
+  className,
 }: ProjectCardProps) {
   return (
-    <Link href={`/projects/${slug}`} className="group block">
-      <Card className="overflow-hidden transition-shadow hover:shadow-md h-full">
+    <Link href={`/projects/${slug}`} className={cn("group block", className)}>
+      <Card className="overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 h-full">
         {/* Thumbnail */}
         <div className="relative w-full h-48 bg-muted">
           {thumbnail ? (
@@ -34,8 +37,14 @@ export function ProjectCard({
               sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
-              No preview
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/20 via-primary/10 to-accent/20">
+              <span className="text-3xl font-bold text-primary/40 select-none" aria-hidden>
+                {title
+                  .split(" ")
+                  .slice(0, 2)
+                  .map((w) => w[0]?.toUpperCase() ?? "")
+                  .join("")}
+              </span>
             </div>
           )}
           {isFeatured && (
@@ -53,12 +62,15 @@ export function ProjectCard({
           {techStackTags.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {techStackTags.slice(0, 4).map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-xs px-2 py-0">
+                <Badge
+                  key={tag}
+                  className="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium"
+                >
                   {tag}
                 </Badge>
               ))}
               {techStackTags.length > 4 && (
-                <Badge variant="secondary" className="text-xs px-2 py-0">
+                <Badge className="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
                   +{techStackTags.length - 4}
                 </Badge>
               )}
