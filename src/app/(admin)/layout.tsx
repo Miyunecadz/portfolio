@@ -4,6 +4,7 @@ import { eq, sql } from "drizzle-orm"
 import { auth } from "@/lib/auth"
 import { db } from "@/db"
 import { contactSubmissions } from "@/db/schema/app"
+import { Toaster } from "sonner"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/admin/app-sidebar"
 import { AdminHeader } from "@/components/admin/admin-header"
@@ -39,6 +40,7 @@ export default async function AdminLayout({
         <main className="flex-1 p-6 pb-20 md:pb-6 overflow-auto">{children}</main>
         <MobileBottomNav />
       </div>
+      <Toaster richColors />
     </SidebarProvider>
   )
 }
