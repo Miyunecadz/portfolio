@@ -15,6 +15,8 @@ export const env = createEnv({
     LINKEDIN_CLIENT_SECRET: z.string().min(1),
     // Comma-separated emails — validated as non-empty string (not z.string().email())
     ADMIN_EMAIL: z.string().min(1),
+    RESEND_API_KEY: z.string().min(1),
+    RESEND_FROM_DOMAIN: z.string().min(1),
     SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   },
   client: {
@@ -34,6 +36,8 @@ export const env = createEnv({
     LINKEDIN_CLIENT_ID: process.env.LINKEDIN_CLIENT_ID,
     LINKEDIN_CLIENT_SECRET: process.env.LINKEDIN_CLIENT_SECRET,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    RESEND_FROM_DOMAIN: process.env.RESEND_FROM_DOMAIN,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
