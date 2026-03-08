@@ -19,16 +19,6 @@ import { ReferencesSection } from "@/components/public/references-section"
 import { EducationSection } from "@/components/public/education-section"
 import { ContactSection } from "@/components/public/contact-section"
 
-const SECTION_COMPONENTS: Record<string, string> = {
-  hero: "Hero",
-  projects: "Projects",
-  experience: "Experience",
-  skills: "Skills",
-  references: "References",
-  education: "Education",
-  contact: "Contact",
-}
-
 const SECTION_HEADINGS: Record<string, string> = {
   projects: "Projects",
   experience: "Experience",
@@ -110,43 +100,35 @@ export default async function PublicHomePage() {
       <PublicHeader siteName={siteName} />
 
       {/* Main content offset for sticky header */}
-      <main className="pt-16">
-        {visibleSections.map((section, index) => {
+      <main className="pt-16 pb-20 md:pb-0">
+        {visibleSections.map((section) => {
           const content = renderSection(section.key)
           if (!content) return null
 
           if (section.key !== "hero") sectionHeadingIndex++
           const labelNumber = String(sectionHeadingIndex).padStart(2, "0")
 
-          const bgClass =
-            section.key === "contact"
-              ? "bg-muted/50"
-              : index % 2 === 0
-                ? "bg-muted/30"
-                : ""
-
           return (
             <section
               key={section.key}
               id={section.key}
               className={cn(
-                section.key !== "hero" ? "py-20 md:py-28" : "",
-                bgClass,
-                section.key === "contact" ? "contact-section" : ""
+                section.key !== "hero" ? "py-20 md:py-28 border-t border-border/50" : "",
+                section.key === "contact" ? "contact-section bg-muted/30" : ""
               )}
             >
               <div className="max-w-5xl mx-auto px-4">
                 {section.key !== "hero" && (
-                  <div className="mb-10">
+                  <div className="mb-12">
                     <span className="section-label">
                       {labelNumber} / {SECTION_HEADINGS[section.key] ?? section.label}
                     </span>
-                    <h2 className="section-heading text-3xl font-bold tracking-tight">
+                    <h2 className="section-heading text-3xl font-bold tracking-tight mt-1">
                       {SECTION_HEADINGS[section.key] ?? section.label}
                     </h2>
-                    <div className="w-12 h-1 bg-primary mt-2 section-accent-bar" aria-hidden />
+                    <div className="w-12 h-1 bg-primary mt-3 section-accent-bar" aria-hidden />
                     {section.key === "contact" && (
-                      <p className="text-muted-foreground mt-3">
+                      <p className="text-muted-foreground mt-3 text-base">
                         Have a project in mind or want to chat? I&apos;d love to hear from you.
                       </p>
                     )}
