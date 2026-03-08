@@ -35,10 +35,11 @@ export function ProjectForm({ project }: ProjectFormProps) {
   const router = useRouter()
   const slugManuallyEdited = useRef(false)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const form = useForm<CreateProjectInput & Partial<UpdateProjectInput>>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(project ? updateProjectSchema : createProjectSchema) as any,
     defaultValues: {
+      ...(project ? { id: project.id } : {}),
       title: project?.title ?? "",
       slug: project?.slug ?? "",
       shortDescription: project?.shortDescription ?? "",
@@ -64,7 +65,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
     }
   }, [titleValue, form])
 
-  async function onSubmit(data: CreateProjectInput) {
+  async function onSubmit(data: CreateProjectInput & Partial<UpdateProjectInput>) {
     const payload = project ? { ...data, id: project.id } : data
     const result = project ? await updateProject(payload) : await createProject(payload)
 
