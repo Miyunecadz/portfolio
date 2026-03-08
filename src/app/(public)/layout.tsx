@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/public/theme-provider"
 import { TemplateClassApplier } from "@/components/public/template-class-applier"
 import { TemplateThemeInitializer } from "@/components/public/template-theme-initializer"
+import { CursorGlow } from "@/components/public/cursor-glow"
 import "@/components/public/developer-template.css"
 import "@/components/public/minimal-template.css"
 
@@ -87,6 +88,7 @@ export default async function PublicLayout({
             fontClassNames={fontClassNames}
           />
           <TemplateThemeInitializer defaultDark={themeConfig.templateName === "developer"} />
+          <CursorGlow templateName={themeConfig.templateName} />
           {children}
         </ThemeProvider>
       </div>
