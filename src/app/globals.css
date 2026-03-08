@@ -125,5 +125,9 @@
   }
   html {
     @apply font-mono;
+    scroll-behavior: smooth;
+  }
+  [id] {
+    scroll-margin-top: 4rem; /* matches h-16 sticky header */
   }
 }
