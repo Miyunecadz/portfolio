@@ -19,7 +19,7 @@ export function AppSidebar({ user, unreadCount }: AppSidebarProps) {
     return (
         <Sidebar
             collapsible="none"
-            className="w-60 border-r hidden md:flex flex-col"
+            className="w-60 border-r hidden md:flex flex-col h-svh sticky top-0"
         >
             <SidebarHeader className="border-b px-4 py-3">
                 <p className="text-sm font-semibold tracking-tight">
