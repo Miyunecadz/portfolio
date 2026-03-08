@@ -2,19 +2,16 @@
 
 import { useState, useTransition } from "react"
 import { saveTheme, generatePreviewToken, publishTheme } from "@/lib/actions/appearance"
-import { type ThemeConfig } from "@/lib/theme-utils"
+import {
+  type ThemeConfig,
+  DEFAULT_MINIMAL_CONFIG,
+  DEFAULT_DEVELOPER_CONFIG,
+  THEME_PRESETS,
+} from "@/lib/theme-utils"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { toast } from "sonner"
-
-const FONT_OPTIONS = ["Inter", "Space Grotesk", "Geist"]
+import { cn } from "@/lib/utils"
 
 interface ColorsFontsClientProps {
   initialConfig: ThemeConfig
@@ -25,6 +22,14 @@ export function ColorsFontsClient({ initialConfig }: ColorsFontsClientProps) {
   const [draftId, setDraftId] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
+  const defaultPrimary =
+    config.templateName === "developer"
+      ? DEFAULT_DEVELOPER_CONFIG.colors.light.primary!
+      : DEFAULT_MINIMAL_CONFIG.colors.light.primary!
+
+  const activePrimary = config.colors.light.primary ?? defaultPrimary
+  const presets = THEME_PRESETS[config.templateName]
+
   function setLightColor(key: keyof ThemeConfig["colors"]["light"], value: string) {
     setConfig((prev) => ({
       ...prev,
@@ -32,25 +37,13 @@ export function ColorsFontsClient({ initialConfig }: ColorsFontsClientProps) {
     }))
   }
 
-  function setDarkColor(key: keyof ThemeConfig["colors"]["dark"], value: string) {
-    setConfig((prev) => ({
-      ...prev,
-      colors: { ...prev.colors, dark: { ...prev.colors.dark, [key]: value } },
-    }))
-  }
-
-  function setFont(key: keyof ThemeConfig["fonts"], value: string) {
-    setConfig((prev) => ({
-      ...prev,
-      fonts: { ...prev.fonts, [key]: value },
-    }))
-  }
-
   function handleSave() {
     startTransition(async () => {
-      const id = await saveTheme(config, config.templateName)
+      const matchingPreset = presets.find((p) => p.primary === activePrimary)
+      const themeName = matchingPreset?.name ?? "Custom"
+      const id = await saveTheme(config, themeName)
       setDraftId(id)
-      toast.success("Colors & fonts saved as draft")
+      toast.success("Accent color saved as draft")
     })
   }
 
@@ -79,102 +72,61 @@ export function ColorsFontsClient({ initialConfig }: ColorsFontsClientProps) {
 
   return (
     <div className="space-y-8">
-      {/* Light Mode Colors */}
       <section className="space-y-4">
-        <h2 className="text-base font-semibold">Light Mode Colors</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {(["primary", "accent", "background", "foreground"] as const).map((key) => (
-            <div key={key} className="space-y-1.5">
-              <Label htmlFor={`light-${key}`} className="capitalize">
-                {key}
-              </Label>
-              <div className="flex items-center gap-2">
-                <input
-                  id={`light-${key}`}
-                  type="color"
-                  value={config.colors.light[key] ?? "#000000"}
-                  onChange={(e) => setLightColor(key, e.target.value)}
-                  className="h-9 w-12 cursor-pointer rounded border border-input"
-                />
-                <span className="text-xs text-muted-foreground font-mono">
-                  {config.colors.light[key] ?? "—"}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+        <h2 className="text-base font-semibold">Accent Color</h2>
 
-      {/* Dark Mode Colors */}
-      <section className="space-y-4">
-        <h2 className="text-base font-semibold">Dark Mode Colors</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {(["primary", "accent", "background", "foreground"] as const).map((key) => (
-            <div key={key} className="space-y-1.5">
-              <Label htmlFor={`dark-${key}`} className="capitalize">
-                {key}
-              </Label>
-              <div className="flex items-center gap-2">
-                <input
-                  id={`dark-${key}`}
-                  type="color"
-                  value={config.colors.dark[key] ?? "#000000"}
-                  onChange={(e) => setDarkColor(key, e.target.value)}
-                  className="h-9 w-12 cursor-pointer rounded border border-input"
-                />
-                <span className="text-xs text-muted-foreground font-mono">
-                  {config.colors.dark[key] ?? "—"}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Typography */}
-      <section className="space-y-4">
-        <h2 className="text-base font-semibold">Typography</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <Label>Heading Font</Label>
-            <Select
-              value={config.fonts.heading ?? "Inter"}
-              onValueChange={(val) => setFont("heading", val)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {FONT_OPTIONS.map((f) => (
-                  <SelectItem key={f} value={f}>
-                    {f}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+        {/* Preset swatch row */}
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground">Presets</p>
+          <div className="flex gap-4">
+            {presets.map((preset) => {
+              const isSelected = preset.primary === activePrimary
+              return (
+                <button
+                  key={preset.name}
+                  type="button"
+                  onClick={() => setLightColor("primary", preset.primary)}
+                  className="flex flex-col items-center gap-1.5"
+                  aria-label={`Select ${preset.name} preset`}
+                >
+                  <span
+                    className={cn(
+                      "block w-8 h-8 rounded-full border-2 border-transparent transition-all",
+                      isSelected && "ring-2 ring-offset-2 ring-primary"
+                    )}
+                    style={{ backgroundColor: preset.primary }}
+                  />
+                  <span className="text-xs text-muted-foreground">{preset.name}</span>
+                </button>
+              )
+            })}
           </div>
+        </div>
 
-          <div className="space-y-1.5">
-            <Label>Body Font</Label>
-            <Select
-              value={config.fonts.body ?? "Inter"}
-              onValueChange={(val) => setFont("body", val)}
+        {/* Single primary picker */}
+        <div className="space-y-1.5">
+          <Label htmlFor="primary-color">Custom</Label>
+          <div className="flex items-center gap-3">
+            <input
+              id="primary-color"
+              type="color"
+              value={activePrimary}
+              onChange={(e) => setLightColor("primary", e.target.value)}
+              className="h-9 w-12 cursor-pointer rounded border border-input"
+            />
+            <span className="text-xs text-muted-foreground font-mono">{activePrimary}</span>
+            <button
+              type="button"
+              onClick={() => setLightColor("primary", defaultPrimary)}
+              className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
             >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {FONT_OPTIONS.map((f) => (
-                  <SelectItem key={f} value={f}>
-                    {f}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              Reset
+            </button>
           </div>
         </div>
       </section>
 
+      {/* Action buttons */}
       <div className="flex gap-3 pt-2">
         <Button onClick={handleSave} disabled={isPending}>
           Save Draft

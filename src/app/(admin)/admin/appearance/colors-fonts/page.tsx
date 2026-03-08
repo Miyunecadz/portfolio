@@ -9,7 +9,7 @@ export default async function ColorsFontsPage() {
       <div>
         <h1 className="text-2xl font-semibold">Colors &amp; Fonts</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Customize colors and typography for your portfolio. Changes are saved as a draft until published.
+          Customize the accent color for your portfolio. Changes are saved as a draft until published.
         </p>
       </div>
 
