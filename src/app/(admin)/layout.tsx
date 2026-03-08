@@ -36,7 +36,7 @@ export default async function AdminLayout({
       <AppSidebar user={user} unreadCount={unreadCount} />
       <div className="flex flex-col flex-1 min-h-screen overflow-hidden">
         <AdminHeader />
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+        <main className="flex-1 p-6 pb-20 md:pb-6 overflow-auto">{children}</main>
         <MobileBottomNav />
       </div>
     </SidebarProvider>
