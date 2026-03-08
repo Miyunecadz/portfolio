@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge"
+import { AnimateIn } from "@/components/public/animate-in"
 
 interface Skill {
   id: string
@@ -37,28 +38,30 @@ export function SkillsSection({ skillsByCategory }: SkillsSectionProps) {
 
   return (
     <div className="flex flex-col gap-8">
-      {categories.map(([category, skills]) => (
-        <div key={category}>
-          <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider mb-4">
-            {category}
-          </h3>
-          <div className="flex flex-wrap gap-3">
-            {skills.map((skill) => (
-              <div
-                key={skill.id}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-card"
-              >
-                <span className="text-sm font-medium text-foreground">{skill.name}</span>
-                <Badge
-                  variant={PROFICIENCY_VARIANTS[skill.proficiency] ?? "secondary"}
-                  className="text-xs px-1.5 py-0"
+      {categories.map(([category, skills], index) => (
+        <AnimateIn key={category} delay={index > 0 && index < 4 ? `delay-${index * 100}` : undefined}>
+          <div>
+            <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider mb-4">
+              {category}
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {skills.map((skill) => (
+                <div
+                  key={skill.id}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-card"
                 >
-                  {PROFICIENCY_LABELS[skill.proficiency] ?? skill.proficiency}
-                </Badge>
-              </div>
-            ))}
+                  <span className="text-sm font-medium text-foreground">{skill.name}</span>
+                  <Badge
+                    variant={PROFICIENCY_VARIANTS[skill.proficiency] ?? "secondary"}
+                    className="text-xs px-1.5 py-0"
+                  >
+                    {PROFICIENCY_LABELS[skill.proficiency] ?? skill.proficiency}
+                  </Badge>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </AnimateIn>
       ))}
     </div>
   )

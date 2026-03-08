@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { TagFilter } from "@/components/public/tag-filter"
 import { ProjectCard } from "@/components/public/project-card"
+import { AnimateIn } from "@/components/public/animate-in"
 
 interface Project {
   id: string
@@ -42,16 +43,20 @@ export function ProjectsSection({ projects, tags }: ProjectsSectionProps) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredFirst.map((project, i) => (
-            <ProjectCard
+            <AnimateIn
               key={project.id}
-              title={project.title}
-              slug={project.slug}
-              shortDescription={project.shortDescription}
-              techStackTags={project.techStackTags ?? []}
-              thumbnail={project.thumbnailUrl}
-              isFeatured={project.isFeatured}
+              delay={i > 0 && i < 4 ? `delay-${i * 75}` : undefined}
               className={project.isFeatured && i === 0 ? "md:col-span-2 lg:col-span-3" : undefined}
-            />
+            >
+              <ProjectCard
+                title={project.title}
+                slug={project.slug}
+                shortDescription={project.shortDescription}
+                techStackTags={project.techStackTags ?? []}
+                thumbnail={project.thumbnailUrl}
+                isFeatured={project.isFeatured}
+              />
+            </AnimateIn>
           ))}
         </div>
       )}

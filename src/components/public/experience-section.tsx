@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge"
+import { AnimateIn } from "@/components/public/animate-in"
 
 interface Experience {
   id: string
@@ -29,7 +30,8 @@ export function ExperienceSection({ experiences }: ExperienceSectionProps) {
   return (
     <div className="flex flex-col gap-8">
       {experiences.map((exp, index) => (
-        <div key={exp.id} className="relative pl-6 border-l-2 border-border">
+        <AnimateIn key={exp.id} delay={index > 0 && index < 4 ? `delay-${index * 100}` : undefined}>
+        <div className="relative pl-6 border-l-2 border-border">
           {/* Timeline dot */}
           <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-background border-2 border-primary" />
 
@@ -69,6 +71,7 @@ export function ExperienceSection({ experiences }: ExperienceSectionProps) {
             )}
           </div>
         </div>
+        </AnimateIn>
       ))}
     </div>
   )
