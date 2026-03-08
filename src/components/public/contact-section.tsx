@@ -15,13 +15,8 @@ export function ContactSection({
   calendlyUrl,
 }: ContactSectionProps) {
   return (
-    <section id="contact" className="py-16">
+    <div>
       <div className="max-w-2xl mx-auto px-4">
-        <h2 className="text-3xl font-bold tracking-tight mb-2">Get in Touch</h2>
-        <p className="text-muted-foreground mb-8">
-          Have a project in mind or want to chat? I&apos;d love to hear from you.
-        </p>
-
         {contactFormEnabled ? (
           <ContactForm />
         ) : (
@@ -35,6 +30,6 @@ export function ContactSection({
           </div>
         )}
       </div>
-    </section>
+    </div>
   )
 }
