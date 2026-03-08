@@ -145,7 +145,6 @@ export default async function PreviewPage({ searchParams }: PreviewPageProps) {
             )
           })}
         </main>
-      </div>
     </div>
   )
 }
