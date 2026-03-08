@@ -88,3 +88,22 @@ export const DEFAULT_DEVELOPER_CONFIG: ThemeConfig = {
   },
   fonts: { heading: "Syne", body: "JetBrains Mono", mono: "JetBrains Mono" },
 }
+
+export type ThemePreset = {
+  name: string
+  primary: string   // lowercase 6-char hex — must match browser color picker output exactly
+  isDefault: boolean
+}
+
+export const THEME_PRESETS: Record<"minimal" | "developer", ThemePreset[]> = {
+  minimal: [
+    { name: "Rust",   primary: "#c85a1e", isDefault: true  },  // template default — locked
+    { name: "Ember",  primary: "#a8401a", isDefault: false },  // deeper rust variant
+    { name: "Forest", primary: "#4a7c59", isDefault: false },  // muted earthy green
+  ],
+  developer: [
+    { name: "Cyan",   primary: "#00e5ff", isDefault: true  },  // template default — locked
+    { name: "Violet", primary: "#c084fc", isDefault: false },  // saturated purple, terminal aesthetic
+    { name: "Lime",   primary: "#a3e635", isDefault: false },  // acid green, maximum contrast on dark
+  ],
+}
