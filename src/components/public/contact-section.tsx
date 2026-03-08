@@ -1,3 +1,5 @@
+"use client"
+
 import { ContactForm } from "@/components/public/contact-form"
 import { CalendlyWidget } from "@/components/public/calendly-widget"
 

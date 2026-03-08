@@ -15,9 +15,10 @@ export const env = createEnv({
     LINKEDIN_CLIENT_SECRET: z.string().min(1),
     // Comma-separated emails — validated as non-empty string (not z.string().email())
     ADMIN_EMAIL: z.string().min(1),
-    RESEND_API_KEY: z.string().min(1),
-    RESEND_FROM_DOMAIN: z.string().min(1),
-    SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+    // Optional until 04-04 (contact form) and media library plans
+    RESEND_API_KEY: z.string().min(1).optional(),
+    RESEND_FROM_DOMAIN: z.string().min(1).optional(),
+    SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),

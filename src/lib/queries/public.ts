@@ -8,6 +8,7 @@ import {
   referencesTable,
   education,
   profile,
+  siteSettings,
 } from "@/db/schema/app"
 import { eq, desc, and, sql } from "drizzle-orm"
 
@@ -159,4 +160,23 @@ export const getProfilePublic = unstable_cache(
   },
   ["public-profile"],
   { tags: ["profile"] }
+)
+
+// ─── SITE SETTINGS ────────────────────────────────────────────────────────
+
+// Public-facing settings: contact form + calendly visibility flags
+export const getSiteSettingsPublic = unstable_cache(
+  async () => {
+    const [row] = await db
+      .select({
+        contactFormEnabled: siteSettings.contactFormEnabled,
+        calendlyEnabled: siteSettings.calendlyEnabled,
+        calendlyUrl: siteSettings.calendlyUrl,
+      })
+      .from(siteSettings)
+      .limit(1)
+    return row ?? { contactFormEnabled: true, calendlyEnabled: false, calendlyUrl: null }
+  },
+  ["public-site-settings"],
+  { tags: ["site-settings"] }
 )
