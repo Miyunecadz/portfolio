@@ -1,6 +1,7 @@
 "use client"
 
 import { useForm } from "react-hook-form"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import {
@@ -34,6 +35,17 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ profile, mediaAssets }: ProfileFormProps) {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
+  const activeTab = searchParams.get("tab") ?? "identity"
+
+  function handleTabChange(tab: string) {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set("tab", tab)
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }
+
   const form = useForm<UpsertProfileInput>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(upsertProfileSchema) as any,
@@ -72,7 +84,7 @@ export function ProfileForm({ profile, mediaAssets }: ProfileFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <Tabs defaultValue="identity">
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList>
             <TabsTrigger value="identity">Identity</TabsTrigger>
             <TabsTrigger value="bio">Bio</TabsTrigger>
