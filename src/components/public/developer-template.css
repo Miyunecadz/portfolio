@@ -143,6 +143,11 @@
   letter-spacing: -0.04em;
 }
 
+/* Mute generic ambient orbs — dot grid + cursor glow provide atmosphere */
+.developer .hero-root > [aria-hidden] > div {
+  opacity: 0.3;
+}
+
 .developer .hero-eyebrow {
   font-family: var(--font-jetbrains-mono, monospace);
   font-size: 11px;
@@ -203,4 +208,23 @@
   border-radius: 0;
   border-color: oklch(0.25 0.03 250);
   background: oklch(0.13 0.01 250);
+}
+
+/* === Bottom nav === */
+.developer .bottom-nav {
+  background: oklch(0.13 0.01 250);
+  border-color: oklch(0.2 0.02 250);
+}
+.developer .bottom-nav a[aria-current="true"] {
+  color: var(--primary);
+}
+
+/* === Back to top === */
+.developer .back-to-top {
+  background: oklch(0.13 0.01 250);
+  border-color: oklch(0.2 0.02 250);
+  color: var(--primary);
+}
+.developer .back-to-top:hover {
+  opacity: 0.8;
 }

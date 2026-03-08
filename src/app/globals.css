@@ -131,6 +131,12 @@
   }
 }
 
+@media (max-width: 767px) {
+  [id] {
+    scroll-margin-bottom: 3.5rem; /* h-14 bottom nav — prevents section headings from hiding behind bottom bar */
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-in,
   .animate-out {
