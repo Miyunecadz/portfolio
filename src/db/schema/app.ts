@@ -198,3 +198,18 @@ export const activityLog = pgTable("activity_log", {
   description: text("description"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
+
+// ─── SITE SETTINGS ────────────────────────────────────────────────────────
+// Single-row table (id = 1). Never delete this row. Covers SET-01, SET-02, DASH-02/DASH-05.
+export const siteSettings = pgTable("site_settings", {
+  id: integer("id").primaryKey().default(1),
+  googleAnalyticsId: text("google_analytics_id"),
+  siteTitle: varchar("site_title", { length: 60 }),
+  siteTagline: varchar("site_tagline", { length: 160 }),
+  contactFormEnabled: boolean("contact_form_enabled").default(true).notNull(),
+  calendlyEnabled: boolean("calendly_enabled").default(false).notNull(),
+  calendlyUrl: text("calendly_url"),
+  maintenanceMode: boolean("maintenance_mode").default(false).notNull(),
+  robotsContent: text("robots_content"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})

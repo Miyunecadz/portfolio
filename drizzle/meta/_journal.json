@@ -8,6 +8,13 @@
       "when": 1772917769749,
       "tag": "0000_numerous_whistler",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1772933686413,
+      "tag": "0001_magical_pestilence",
+      "breakpoints": true
     }
   ]
 }
