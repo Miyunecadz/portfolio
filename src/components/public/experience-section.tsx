@@ -22,6 +22,17 @@ function formatDate(date: Date): string {
   return date.toLocaleDateString("en-US", { month: "short", year: "numeric" })
 }
 
+function formatDuration(start: Date, end: Date | null, isCurrent: boolean): string {
+  const endDate = isCurrent ? new Date() : (end ?? new Date())
+  const months =
+    (endDate.getFullYear() - start.getFullYear()) * 12 +
+    (endDate.getMonth() - start.getMonth())
+  if (months < 12) return `${months}mo`
+  const years = Math.floor(months / 12)
+  const rem = months % 12
+  return rem > 0 ? `${years}y ${rem}mo` : `${years}y`
+}
+
 export function ExperienceSection({ experiences }: ExperienceSectionProps) {
   if (experiences.length === 0) {
     return <p className="text-muted-foreground">No experience entries yet.</p>
@@ -41,16 +52,20 @@ export function ExperienceSection({ experiences }: ExperienceSectionProps) {
                 <h3 className="font-semibold text-foreground text-lg leading-tight">
                   {exp.jobTitle}
                 </h3>
-                <p className="text-muted-foreground font-medium">{exp.companyName}</p>
+                <p className="company-name text-muted-foreground font-medium">{exp.companyName}</p>
               </div>
               <Badge variant="secondary" className="shrink-0 text-xs">
                 {exp.employmentType}
               </Badge>
             </div>
 
-            <p className="text-sm text-muted-foreground">
-              {formatDate(exp.startDate)} &ndash;{" "}
-              {exp.isCurrentRole ? "Present" : exp.endDate ? formatDate(exp.endDate) : ""}
+            <p className="text-sm text-muted-foreground flex items-center gap-2 flex-wrap">
+              <span>
+                {formatDate(exp.startDate)} &ndash;{" "}
+                {exp.isCurrentRole ? "Present" : exp.endDate ? formatDate(exp.endDate) : ""}
+              </span>
+              <span aria-hidden className="opacity-40">·</span>
+              <span className="tabular-nums">{formatDuration(exp.startDate, exp.endDate, exp.isCurrentRole)}</span>
             </p>
 
             {exp.description && (
