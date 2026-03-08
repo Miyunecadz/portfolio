@@ -113,15 +113,16 @@ export default async function PreviewPage({ searchParams }: PreviewPageProps) {
       {/* Inject draft theme CSS vars — overrides the active theme */}
       <style dangerouslySetInnerHTML={{ __html: `:root { ${cssVars} }` }} />
 
-      {/* Preview mode banner */}
+      {/* Preview mode banner — fixed, ~36px tall (py-1.5 + text-sm line-height) */}
       <div className="fixed top-0 left-0 right-0 z-[100] bg-amber-500 text-amber-950 text-sm font-medium text-center py-1.5 px-4">
         Preview Mode — this theme is not live. Close this tab to exit preview.
       </div>
 
-      <div className="mt-8">
-        <PublicHeader siteName={siteName} />
+      {/* Header offset by banner height (top-9 = 36px) */}
+      <PublicHeader siteName={siteName} topOffset="top-9" />
 
-        <main className="pt-16">
+      {/* main offset: 36px banner + 64px header = 100px */}
+      <main className="pt-[100px]">
           {visibleSections.map((section) => {
             const content = renderSection(section.key)
             if (!content) return null

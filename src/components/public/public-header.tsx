@@ -12,11 +12,12 @@ const NAV_LINKS = [
 
 interface PublicHeaderProps {
   siteName: string
+  topOffset?: string
 }
 
-export function PublicHeader({ siteName }: PublicHeaderProps) {
+export function PublicHeader({ siteName, topOffset = "top-0" }: PublicHeaderProps) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-sm">
+    <header className={`fixed ${topOffset} left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-sm`}>
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Site name / logo */}
         <a href="#" className="font-semibold text-lg text-foreground hover:text-primary transition-colors">
