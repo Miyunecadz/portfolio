@@ -11,6 +11,8 @@ import {
   GraduationCap,
   Images,
   PaintBrush,
+  Palette,
+  Rows,
   GithubLogo,
   LinkedinLogo,
   Robot,
@@ -45,7 +47,9 @@ const navItems: NavItem[] = [
   { href: "/admin/education", label: "Education", icon: GraduationCap, group: "Content" },
   { href: "/admin/media", label: "Media", icon: Images, group: "Content" },
   // Appearance
-  { href: "/admin/appearance", label: "Theme", icon: PaintBrush, group: "Appearance" },
+  { href: "/admin/appearance/templates", label: "Templates", icon: PaintBrush, group: "Appearance" },
+  { href: "/admin/appearance/colors-fonts", label: "Colors & Fonts", icon: Palette, group: "Appearance" },
+  { href: "/admin/appearance/sections", label: "Sections & Order", icon: Rows, group: "Appearance" },
   // Integrations
   { href: "/admin/integrations/github", label: "GitHub", icon: GithubLogo, group: "Integrations" },
   { href: "/admin/integrations/linkedin", label: "LinkedIn", icon: LinkedinLogo, group: "Integrations" },
