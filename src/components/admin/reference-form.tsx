@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { MediaPicker } from "@/components/admin/media-picker"
 import {
   createReferenceSchema,
   updateReferenceSchema,
@@ -20,12 +21,14 @@ import {
 } from "@/schemas/content"
 import { createReference, updateReference } from "@/lib/actions/references"
 import type { Reference } from "@/lib/queries/references"
+import type { MediaAsset } from "@/lib/queries/media"
 
 interface ReferenceFormProps {
   reference?: Reference
+  mediaAssets: MediaAsset[]
 }
 
-export function ReferenceForm({ reference }: ReferenceFormProps) {
+export function ReferenceForm({ reference, mediaAssets }: ReferenceFormProps) {
   const router = useRouter()
 
   const form = useForm<CreateReferenceInput & Partial<UpdateReferenceInput>>({
@@ -105,13 +108,29 @@ export function ReferenceForm({ reference }: ReferenceFormProps) {
           </FormItem>
         )} />
 
-        <FormField control={form.control} name="photoUrl" render={({ field }) => (
-          <FormItem>
-            <FormLabel>Photo URL</FormLabel>
-            <FormControl><Input {...field} value={field.value ?? ""} placeholder="Paste URL (Media Library in 03-04)" /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
+        <div className="space-y-2">
+          <Label>Photo</Label>
+          {form.watch("photoUrl") && (
+            <img
+              src={form.watch("photoUrl")!}
+              alt="Photo preview"
+              className="w-16 h-16 object-cover rounded-full border"
+            />
+          )}
+          <div className="flex gap-2 items-center">
+            <MediaPicker
+              trigger={<Button variant="outline" type="button">Choose from Media Library</Button>}
+              onSelect={(asset) => form.setValue("photoUrl", asset.publicUrl)}
+              filter="image"
+              assets={mediaAssets}
+            />
+            {form.watch("photoUrl") && (
+              <Button variant="ghost" type="button" onClick={() => form.setValue("photoUrl", "")}>
+                Remove
+              </Button>
+            )}
+          </div>
+        </div>
 
         <FormField control={form.control} name="isVisible" render={({ field }) => (
           <FormItem className="flex items-center gap-3">

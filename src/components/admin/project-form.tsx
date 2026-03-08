@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RichTextEditor } from "@/components/admin/rich-text-editor"
 import { ChipInput } from "@/components/admin/chip-input"
+import { MediaPicker } from "@/components/admin/media-picker"
 import {
   createProjectSchema,
   updateProjectSchema,
@@ -26,12 +27,14 @@ import {
 } from "@/schemas/content"
 import { createProject, updateProject } from "@/lib/actions/projects"
 import type { Project } from "@/lib/queries/projects"
+import type { MediaAsset } from "@/lib/queries/media"
 
 interface ProjectFormProps {
   project?: Project
+  mediaAssets: MediaAsset[]
 }
 
-export function ProjectForm({ project }: ProjectFormProps) {
+export function ProjectForm({ project, mediaAssets }: ProjectFormProps) {
   const router = useRouter()
   const slugManuallyEdited = useRef(false)
 
@@ -186,13 +189,29 @@ export function ProjectForm({ project }: ProjectFormProps) {
               )} />
             </div>
 
-            <FormField control={form.control} name="thumbnailUrl" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Thumbnail URL</FormLabel>
-                <FormControl><Input {...field} value={field.value ?? ""} placeholder="Paste URL or use Media Library (added in Plan 03-04)" /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+            <div className="space-y-2">
+              <Label>Thumbnail</Label>
+              {form.watch("thumbnailUrl") && (
+                <img
+                  src={form.watch("thumbnailUrl")!}
+                  alt="Thumbnail preview"
+                  className="w-32 h-20 object-cover rounded border"
+                />
+              )}
+              <div className="flex gap-2 items-center">
+                <MediaPicker
+                  trigger={<Button variant="outline" type="button">Choose from Media Library</Button>}
+                  onSelect={(asset) => form.setValue("thumbnailUrl", asset.publicUrl)}
+                  filter="image"
+                  assets={mediaAssets}
+                />
+                {form.watch("thumbnailUrl") && (
+                  <Button variant="ghost" type="button" onClick={() => form.setValue("thumbnailUrl", "")}>
+                    Remove
+                  </Button>
+                )}
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="casestudy" className="space-y-4 pt-4">

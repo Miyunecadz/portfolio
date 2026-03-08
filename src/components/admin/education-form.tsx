@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
+import { MediaPicker } from "@/components/admin/media-picker"
 import {
   createEducationSchema,
   updateEducationSchema,
@@ -20,12 +21,14 @@ import {
 } from "@/schemas/content"
 import { createEducation, updateEducation } from "@/lib/actions/education"
 import type { Education } from "@/lib/queries/education"
+import type { MediaAsset } from "@/lib/queries/media"
 
 interface EducationFormProps {
   entry?: Education
+  mediaAssets: MediaAsset[]
 }
 
-export function EducationForm({ entry }: EducationFormProps) {
+export function EducationForm({ entry, mediaAssets }: EducationFormProps) {
   const router = useRouter()
 
   const form = useForm<CreateEducationInput & Partial<UpdateEducationInput>>({
@@ -131,13 +134,29 @@ export function EducationForm({ entry }: EducationFormProps) {
           )} />
         </div>
 
-        <FormField control={form.control} name="schoolLogoUrl" render={({ field }) => (
-          <FormItem>
-            <FormLabel>School Logo URL</FormLabel>
-            <FormControl><Input {...field} value={field.value ?? ""} placeholder="Paste URL (Media Library in 03-04)" /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
+        <div className="space-y-2">
+          <Label>School Logo</Label>
+          {form.watch("schoolLogoUrl") && (
+            <img
+              src={form.watch("schoolLogoUrl")!}
+              alt="School logo preview"
+              className="w-20 h-20 object-contain rounded border"
+            />
+          )}
+          <div className="flex gap-2 items-center">
+            <MediaPicker
+              trigger={<Button variant="outline" type="button">Choose from Media Library</Button>}
+              onSelect={(asset) => form.setValue("schoolLogoUrl", asset.publicUrl)}
+              filter="image"
+              assets={mediaAssets}
+            />
+            {form.watch("schoolLogoUrl") && (
+              <Button variant="ghost" type="button" onClick={() => form.setValue("schoolLogoUrl", "")}>
+                Remove
+              </Button>
+            )}
+          </div>
+        </div>
 
         <FormField control={form.control} name="isVisible" render={({ field }) => (
           <FormItem className="flex items-center gap-3">

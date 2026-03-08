@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { getExperience } from "@/lib/queries/experience"
+import { getMediaAssets } from "@/lib/queries/media"
 import { ExperienceForm } from "@/components/admin/experience-form"
 
 interface Props {
@@ -8,7 +9,10 @@ interface Props {
 
 export default async function EditExperiencePage({ params }: Props) {
   const { id } = await params
-  const experience = await getExperience(id)
+  const [experience, mediaAssets] = await Promise.all([
+    getExperience(id),
+    getMediaAssets(),
+  ])
 
   if (!experience) notFound()
 
@@ -18,7 +22,7 @@ export default async function EditExperiencePage({ params }: Props) {
         <h1 className="text-2xl font-bold">Edit Experience</h1>
         <p className="text-muted-foreground text-sm mt-1">{experience.jobTitle} at {experience.companyName}</p>
       </div>
-      <ExperienceForm experience={experience} />
+      <ExperienceForm experience={experience} mediaAssets={mediaAssets} />
     </div>
   )
 }

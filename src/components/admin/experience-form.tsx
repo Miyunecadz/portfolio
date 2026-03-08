@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { RichTextEditor } from "@/components/admin/rich-text-editor"
 import { ChipInput } from "@/components/admin/chip-input"
+import { MediaPicker } from "@/components/admin/media-picker"
 import {
   createExperienceSchema,
   updateExperienceSchema,
@@ -22,12 +23,14 @@ import {
 } from "@/schemas/content"
 import { createExperience, updateExperience } from "@/lib/actions/experience"
 import type { Experience } from "@/lib/queries/experience"
+import type { MediaAsset } from "@/lib/queries/media"
 
 interface ExperienceFormProps {
   experience?: Experience
+  mediaAssets: MediaAsset[]
 }
 
-export function ExperienceForm({ experience }: ExperienceFormProps) {
+export function ExperienceForm({ experience, mediaAssets }: ExperienceFormProps) {
   const router = useRouter()
 
   // Format timestamp to "YYYY-MM" for month input
@@ -96,31 +99,45 @@ export function ExperienceForm({ experience }: ExperienceFormProps) {
           )} />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <FormField control={form.control} name="employmentType" render={({ field }) => (
-            <FormItem>
-              <FormLabel>Employment Type *</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
-                <SelectContent>
-                  <SelectItem value="full-time">Full-time</SelectItem>
-                  <SelectItem value="part-time">Part-time</SelectItem>
-                  <SelectItem value="contract">Contract</SelectItem>
-                  <SelectItem value="freelance">Freelance</SelectItem>
-                  <SelectItem value="internship">Internship</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )} />
+        <FormField control={form.control} name="employmentType" render={({ field }) => (
+          <FormItem>
+            <FormLabel>Employment Type *</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
+              <SelectContent>
+                <SelectItem value="full-time">Full-time</SelectItem>
+                <SelectItem value="part-time">Part-time</SelectItem>
+                <SelectItem value="contract">Contract</SelectItem>
+                <SelectItem value="freelance">Freelance</SelectItem>
+                <SelectItem value="internship">Internship</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )} />
 
-          <FormField control={form.control} name="companyLogoUrl" render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company Logo URL</FormLabel>
-              <FormControl><Input {...field} value={field.value ?? ""} placeholder="Paste URL (Media Library in 03-04)" /></FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
+        <div className="space-y-2">
+          <Label>Company Logo</Label>
+          {form.watch("companyLogoUrl") && (
+            <img
+              src={form.watch("companyLogoUrl")!}
+              alt="Company logo preview"
+              className="w-20 h-20 object-contain rounded border"
+            />
+          )}
+          <div className="flex gap-2 items-center">
+            <MediaPicker
+              trigger={<Button variant="outline" type="button">Choose from Media Library</Button>}
+              onSelect={(asset) => form.setValue("companyLogoUrl", asset.publicUrl)}
+              filter="image"
+              assets={mediaAssets}
+            />
+            {form.watch("companyLogoUrl") && (
+              <Button variant="ghost" type="button" onClick={() => form.setValue("companyLogoUrl", "")}>
+                Remove
+              </Button>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
