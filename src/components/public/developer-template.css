@@ -1,0 +1,49 @@
+/* Developer Template — applied when <body class="developer"> */
+.developer {
+  /* Override font for monospace accents on specific elements */
+  --font-code-accent: var(--font-mono);
+}
+
+/* Dark-by-default: override :root vars within .developer */
+/* These are light-mode overrides that create the dark terminal look */
+.developer {
+  --background: oklch(0.1 0.01 250);
+  --foreground: oklch(0.95 0 0);
+  --primary: oklch(0.7 0.18 250);
+  --accent: oklch(0.2 0.05 250);
+  --muted: oklch(0.15 0.01 250);
+  --muted-foreground: oklch(0.65 0.02 250);
+  --card: oklch(0.13 0.01 250);
+  --card-foreground: oklch(0.95 0 0);
+  --border: oklch(0.2 0.02 250);
+}
+
+/* Tech stack tags get monospace font in developer template */
+.developer .tech-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* Section headings get Space Grotesk feel */
+.developer h2, .developer h3 {
+  letter-spacing: -0.02em;
+}
+
+/* Terminal-style code accent color on specific highlights */
+.developer .accent-text {
+  color: oklch(0.7 0.18 250);
+  font-family: var(--font-mono);
+}
+
+/* Availability badge — terminal style */
+.developer .availability-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  border-radius: 0;
+}
+
+/* Project cards — sharper borders in developer template */
+.developer .project-card {
+  border-radius: 0;
+  border-color: oklch(0.25 0.03 250);
+}
