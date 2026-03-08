@@ -131,6 +131,8 @@ export const themes = pgTable("themes", {
   templateName: varchar("template_name", { length: 50 }).notNull(),
   config: jsonb("config").notNull().default({}),
   isDraft: boolean("is_draft").default(false).notNull(),
+  previewToken: text("preview_token"),
+  previewTokenExpiry: timestamp("preview_token_expiry"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
@@ -211,5 +213,8 @@ export const siteSettings = pgTable("site_settings", {
   calendlyUrl: text("calendly_url"),
   maintenanceMode: boolean("maintenance_mode").default(false).notNull(),
   robotsContent: text("robots_content"),
+  sectionOrdering: jsonb("section_ordering")
+    .$type<Array<{ key: string; label: string; isVisible: boolean; sortOrder: number }>>()
+    .default([]),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
