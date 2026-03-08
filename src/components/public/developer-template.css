@@ -2,6 +2,7 @@
 .developer {
   /* Override font for monospace accents on specific elements */
   --font-code-accent: var(--font-mono);
+  font-family: var(--font-mono);
 }
 
 /* Dark-by-default: override :root vars within .developer */
