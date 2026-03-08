@@ -85,3 +85,22 @@ export const createEducationSchema = z.object({
 export const updateEducationSchema = createEducationSchema.extend({ id: z.string().uuid() })
 export type CreateEducationInput = z.infer<typeof createEducationSchema>
 export type UpdateEducationInput = z.infer<typeof updateEducationSchema>
+
+// ─── PROFILE ──────────────────────────────────────────────────────────────
+export const upsertProfileSchema = z.object({
+  id: z.string().uuid().optional(),   // undefined = insert, defined = update
+  fullName: z.string().max(100).optional().nullable(),
+  tagline: z.string().max(160).optional().nullable(),
+  bio: z.string().optional().nullable(),   // TipTap HTML
+  location: z.string().max(100).optional().nullable(),
+  email: z.string().email("Must be a valid email").optional().nullable().or(z.literal("")),
+  phone: z.string().max(30).optional().nullable(),
+  availabilityStatus: z.enum(["open_to_work", "open_to_freelance", "not_available"]).default("not_available"),
+  avatarUrl: z.string().optional().nullable(),
+  resumeUrl: z.string().optional().nullable(),
+  githubUrl: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
+  linkedinUrl: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
+  facebookUrl: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
+  blogUrl: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
+})
+export type UpsertProfileInput = z.infer<typeof upsertProfileSchema>
