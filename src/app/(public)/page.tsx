@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils"
 import { getSectionOrdering } from "@/lib/queries/appearance"
 import {
   getPublishedProjects,
@@ -108,21 +109,39 @@ export default async function PublicHomePage() {
 
       {/* Main content offset for sticky header */}
       <main className="pt-16">
-        {visibleSections.map((section) => {
+        {visibleSections.map((section, index) => {
           const content = renderSection(section.key)
           if (!content) return null
+
+          const bgClass =
+            section.key === "contact"
+              ? "bg-muted/50"
+              : index % 2 === 0
+                ? "bg-muted/30"
+                : ""
 
           return (
             <section
               key={section.key}
               id={section.key}
-              className="py-20 md:py-28"
+              className={cn(
+                section.key !== "hero" ? "py-20 md:py-28" : "",
+                bgClass
+              )}
             >
               <div className="max-w-5xl mx-auto px-4">
                 {section.key !== "hero" && (
-                  <h2 className="text-3xl font-bold tracking-tight mb-10">
-                    {SECTION_HEADINGS[section.key] ?? section.label}
-                  </h2>
+                  <div className="mb-10">
+                    <h2 className="text-3xl font-bold tracking-tight">
+                      {SECTION_HEADINGS[section.key] ?? section.label}
+                    </h2>
+                    <div className="w-12 h-1 bg-primary mt-2" aria-hidden />
+                    {section.key === "contact" && (
+                      <p className="text-muted-foreground mt-3">
+                        Have a project in mind or want to chat? I&apos;d love to hear from you.
+                      </p>
+                    )}
+                  </div>
                 )}
                 {content}
               </div>
