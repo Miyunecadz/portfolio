@@ -26,6 +26,11 @@ export function ProjectsSection({ projects, tags }: ProjectsSectionProps) {
     ? projects.filter((p) => (p.techStackTags ?? []).includes(selectedTag))
     : projects
 
+  const featuredFirst = [
+    ...filtered.filter((p) => p.isFeatured),
+    ...filtered.filter((p) => !p.isFeatured),
+  ]
+
   return (
     <div className="flex flex-col gap-8">
       <TagFilter tags={tags} selectedTag={selectedTag} onTagChange={setSelectedTag} />
@@ -36,7 +41,7 @@ export function ProjectsSection({ projects, tags }: ProjectsSectionProps) {
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((project) => (
+          {featuredFirst.map((project, i) => (
             <ProjectCard
               key={project.id}
               title={project.title}
@@ -45,6 +50,7 @@ export function ProjectsSection({ projects, tags }: ProjectsSectionProps) {
               techStackTags={project.techStackTags ?? []}
               thumbnail={project.thumbnailUrl}
               isFeatured={project.isFeatured}
+              className={project.isFeatured && i === 0 ? "md:col-span-2 lg:col-span-3" : undefined}
             />
           ))}
         </div>
