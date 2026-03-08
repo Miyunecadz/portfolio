@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { db } from "@/db"
 import { experiences } from "@/db/schema/app"
 import { eq } from "drizzle-orm"
@@ -19,6 +19,7 @@ export async function createExperience(formData: unknown): Promise<ActionResult<
     }
     const [exp] = await db.insert(experiences).values(data).returning({ id: experiences.id })
     await logActivity("created", "experience", exp.id, `Created experience "${parsed.data.jobTitle} at ${parsed.data.companyName}"`)
+    revalidateTag("experience", "max")
     revalidatePath("/admin/experience")
     return { success: true, data: { id: exp.id } }
   } catch (e) {
@@ -41,6 +42,7 @@ export async function updateExperience(formData: unknown): Promise<ActionResult<
     }).where(eq(experiences.id, id))
 
     await logActivity("updated", "experience", id, `Updated experience "${data.jobTitle} at ${data.companyName}"`)
+    revalidateTag("experience", "max")
     revalidatePath("/admin/experience")
     return { success: true, data: { id } }
   } catch (e) {
@@ -54,6 +56,7 @@ export async function deleteExperience(id: string): Promise<ActionResult> {
     const [exp] = await db.select({ jobTitle: experiences.jobTitle }).from(experiences).where(eq(experiences.id, id)).limit(1)
     await db.delete(experiences).where(eq(experiences.id, id))
     await logActivity("deleted", "experience", id, `Deleted experience "${exp?.jobTitle ?? id}"`)
+    revalidateTag("experience", "max")
     revalidatePath("/admin/experience")
     return { success: true, data: undefined }
   } catch (e) {

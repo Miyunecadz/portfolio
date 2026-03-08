@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { db } from "@/db"
 import { skills, skillCategories } from "@/db/schema/app"
 import { eq } from "drizzle-orm"
@@ -13,6 +13,7 @@ export async function createSkill(formData: unknown): Promise<ActionResult<{ id:
   try {
     const [skill] = await db.insert(skills).values(parsed.data).returning({ id: skills.id })
     await logActivity("created", "skill", skill.id, `Created skill "${parsed.data.name}"`)
+    revalidateTag("skills", "max")
     revalidatePath("/admin/skills")
     return { success: true, data: { id: skill.id } }
   } catch (e) {
@@ -28,6 +29,7 @@ export async function updateSkill(formData: unknown): Promise<ActionResult<{ id:
   try {
     await db.update(skills).set({ ...data, updatedAt: new Date() }).where(eq(skills.id, id))
     await logActivity("updated", "skill", id, `Updated skill "${data.name}"`)
+    revalidateTag("skills", "max")
     revalidatePath("/admin/skills")
     return { success: true, data: { id } }
   } catch (e) {
@@ -41,6 +43,7 @@ export async function deleteSkill(id: string): Promise<ActionResult> {
     const [skill] = await db.select({ name: skills.name }).from(skills).where(eq(skills.id, id)).limit(1)
     await db.delete(skills).where(eq(skills.id, id))
     await logActivity("deleted", "skill", id, `Deleted skill "${skill?.name ?? id}"`)
+    revalidateTag("skills", "max")
     revalidatePath("/admin/skills")
     return { success: true, data: undefined }
   } catch (e) {
