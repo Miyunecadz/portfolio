@@ -16,7 +16,7 @@ export function HeroSection({
   resumeUrl,
 }: HeroSectionProps) {
   return (
-    <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center relative text-center gap-6 px-4">
+    <div className="hero-root min-h-[calc(100vh-64px)] flex flex-col items-center justify-center relative text-center gap-6 px-4">
       {/* Decorative gradient tint */}
       <div
         aria-hidden
@@ -25,6 +25,11 @@ export function HeroSection({
 
       {/* Content above gradient */}
       <div className="relative z-10 flex flex-col items-center gap-6">
+        {/* Eyebrow label — visible in Minimal template via CSS, hidden otherwise */}
+        <span className="hero-eyebrow" aria-hidden>
+          {tagline ? "Portfolio" : "Available for work"}
+        </span>
+
         {/* Availability badge — only shown when actively open */}
         {availabilityStatus === "open_to_work" && (
           <Badge className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800">

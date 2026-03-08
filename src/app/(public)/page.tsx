@@ -103,6 +103,8 @@ export default async function PublicHomePage() {
     }
   }
 
+  let sectionHeadingIndex = 0
+
   return (
     <div className="min-h-screen bg-background">
       <PublicHeader siteName={siteName} />
@@ -112,6 +114,9 @@ export default async function PublicHomePage() {
         {visibleSections.map((section, index) => {
           const content = renderSection(section.key)
           if (!content) return null
+
+          if (section.key !== "hero") sectionHeadingIndex++
+          const labelNumber = String(sectionHeadingIndex).padStart(2, "0")
 
           const bgClass =
             section.key === "contact"
@@ -126,16 +131,20 @@ export default async function PublicHomePage() {
               id={section.key}
               className={cn(
                 section.key !== "hero" ? "py-20 md:py-28" : "",
-                bgClass
+                bgClass,
+                section.key === "contact" ? "contact-section" : ""
               )}
             >
               <div className="max-w-5xl mx-auto px-4">
                 {section.key !== "hero" && (
                   <div className="mb-10">
-                    <h2 className="text-3xl font-bold tracking-tight">
+                    <span className="section-label">
+                      {labelNumber} / {SECTION_HEADINGS[section.key] ?? section.label}
+                    </span>
+                    <h2 className="section-heading text-3xl font-bold tracking-tight">
                       {SECTION_HEADINGS[section.key] ?? section.label}
                     </h2>
-                    <div className="w-12 h-1 bg-primary mt-2" aria-hidden />
+                    <div className="w-12 h-1 bg-primary mt-2 section-accent-bar" aria-hidden />
                     {section.key === "contact" && (
                       <p className="text-muted-foreground mt-3">
                         Have a project in mind or want to chat? I&apos;d love to hear from you.

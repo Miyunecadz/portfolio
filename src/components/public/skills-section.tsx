@@ -41,14 +41,14 @@ export function SkillsSection({ skillsByCategory }: SkillsSectionProps) {
       {categories.map(([category, skills], index) => (
         <AnimateIn key={category} delay={index > 0 && index < 4 ? `delay-${index * 100}` : undefined}>
           <div>
-            <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider mb-4">
+            <h3 className="skills-category-heading font-semibold text-sm text-muted-foreground uppercase tracking-wider mb-4">
               {category}
             </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="skills-grid flex flex-wrap gap-3">
               {skills.map((skill) => (
                 <div
                   key={skill.id}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-card"
+                  className="skill-chip flex items-center gap-2 px-3 py-2 rounded-lg border bg-card"
                 >
                   <span className="text-sm font-medium text-foreground">{skill.name}</span>
                   <Badge

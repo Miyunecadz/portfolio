@@ -41,7 +41,7 @@ export function ProjectsSection({ projects, tags }: ProjectsSectionProps) {
           No projects found{selectedTag ? ` for "${selectedTag}"` : ""}.
         </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="projects-grid-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredFirst.map((project, i) => (
             <AnimateIn
               key={project.id}

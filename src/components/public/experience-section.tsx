@@ -31,9 +31,9 @@ export function ExperienceSection({ experiences }: ExperienceSectionProps) {
     <div className="flex flex-col gap-8">
       {experiences.map((exp, index) => (
         <AnimateIn key={exp.id} delay={index > 0 && index < 4 ? `delay-${index * 100}` : undefined}>
-        <div className="relative pl-6 border-l-2 border-border">
+        <div className="experience-entry relative pl-6 border-l-2 border-border">
           {/* Timeline dot */}
-          <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-background border-2 border-primary" />
+          <div className="experience-dot absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-background border-2 border-primary" />
 
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-start gap-2">
