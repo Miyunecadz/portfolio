@@ -24,7 +24,7 @@ export default async function MediaPage({
         </div>
       </div>
       <MediaCategoryFilter activeCategory={activeCategory} />
-      <MediaGrid initialAssets={assets} />
+      <MediaGrid key={activeCategory} initialAssets={assets} />
     </div>
   )
 }
