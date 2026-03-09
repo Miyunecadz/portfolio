@@ -10,6 +10,10 @@ export default defineConfig({
     globals: true,
   },
   resolve: {
-    alias: { "@": path.resolve(__dirname, "src") },
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+      // server-only is a Next.js compile-time guard; stub it out in test environment
+      "server-only": path.resolve(__dirname, "tests/__mocks__/server-only.ts"),
+    },
   },
 })
