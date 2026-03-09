@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils"
-import { getSectionOrdering } from "@/lib/queries/appearance"
 import {
   getPublishedProjects,
   getPublishedProjectTags,
@@ -28,9 +27,18 @@ const SECTION_HEADINGS: Record<string, string> = {
   contact: "Get in Touch",
 }
 
+const DEFAULT_SECTIONS = [
+  { key: "hero", label: "Hero", isVisible: true, sortOrder: 0 },
+  { key: "projects", label: "Projects", isVisible: true, sortOrder: 1 },
+  { key: "experience", label: "Experience", isVisible: true, sortOrder: 2 },
+  { key: "skills", label: "Skills", isVisible: true, sortOrder: 3 },
+  { key: "references", label: "References", isVisible: true, sortOrder: 4 },
+  { key: "education", label: "Education", isVisible: true, sortOrder: 5 },
+  { key: "contact", label: "Contact", isVisible: true, sortOrder: 6 },
+]
+
 export default async function PublicHomePage() {
   const [
-    sectionOrdering,
     projects,
     tags,
     experiences,
@@ -40,7 +48,6 @@ export default async function PublicHomePage() {
     profile,
     settings,
   ] = await Promise.all([
-    getSectionOrdering(),
     getPublishedProjects(),
     getPublishedProjectTags(),
     getPublishedExperiences(),
@@ -52,9 +59,7 @@ export default async function PublicHomePage() {
   ])
 
   const siteName = profile?.fullName ?? "Portfolio"
-  const visibleSections = [...sectionOrdering]
-    .filter((s) => s.isVisible)
-    .sort((a, b) => a.sortOrder - b.sortOrder)
+  const visibleSections = DEFAULT_SECTIONS.filter((s) => s.isVisible)
 
   function renderSection(sectionKey: string) {
     switch (sectionKey) {
@@ -68,6 +73,11 @@ export default async function PublicHomePage() {
               "not_available"
             }
             resumeUrl={profile?.resumeUrl ?? null}
+            avatarUrl={profile?.avatarUrl ?? null}
+            githubUrl={profile?.githubUrl ?? null}
+            linkedinUrl={profile?.linkedinUrl ?? null}
+            facebookUrl={profile?.facebookUrl ?? null}
+            blogUrl={profile?.blogUrl ?? null}
           />
         )
       case "projects":
