@@ -1,12 +1,7 @@
-// Wave 0 stub — Wave 2 (07-02) will implement these queries.
-// These exports exist so test imports resolve; all functions throw until implemented.
+import { db } from "@/db"
+import { siteSettings } from "@/db/schema/app"
 
-export async function getSiteSettingsAdmin(): Promise<{
-  maintenanceMessage: string | null
-  siteTitle: string
-  maintenanceMode: boolean
-  calendlyEnabled: boolean
-  calendlyUrl: string | null
-}> {
-  throw new Error("getSiteSettingsAdmin not yet implemented — Wave 2 pending")
+export async function getSiteSettingsAdmin() {
+  const row = await db.select().from(siteSettings).limit(1)
+  return row[0] ?? null
 }
