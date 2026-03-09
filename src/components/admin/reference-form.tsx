@@ -123,6 +123,7 @@ export function ReferenceForm({ reference, mediaAssets }: ReferenceFormProps) {
               onSelect={(asset) => form.setValue("photoUrl", asset.publicUrl)}
               filter="image"
               assets={mediaAssets}
+              usedIn="reference"
             />
             {form.watch("photoUrl") && (
               <Button variant="ghost" type="button" onClick={() => form.setValue("photoUrl", "")}>

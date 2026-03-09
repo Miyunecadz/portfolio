@@ -21,6 +21,7 @@ interface MediaGridProps {
   selectable?: boolean
   filter?: "image" | "pdf" | "all"
   onSelect?: (asset: MediaAsset) => void
+  usedIn?: string
 }
 
 export function MediaGrid({
@@ -28,6 +29,7 @@ export function MediaGrid({
   selectable = false,
   filter = "all",
   onSelect,
+  usedIn = "misc",
 }: MediaGridProps) {
   const [assets, setAssets] = useState<MediaAsset[]>(initialAssets)
   const [, startTransition] = useTransition()
@@ -51,7 +53,7 @@ export function MediaGrid({
     const section =
       file.type.startsWith("image/") ? "misc" : file.type === "application/pdf" ? "resumes" : "misc"
     startTransition(async () => {
-      const result = await uploadMediaAsset(formData, section)
+      const result = await uploadMediaAsset(formData, usedIn, section)
       if (result.success) {
         setAssets((prev) => [
           {

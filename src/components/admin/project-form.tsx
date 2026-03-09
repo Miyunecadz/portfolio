@@ -204,6 +204,7 @@ export function ProjectForm({ project, mediaAssets }: ProjectFormProps) {
                   onSelect={(asset) => form.setValue("thumbnailUrl", asset.publicUrl)}
                   filter="image"
                   assets={mediaAssets}
+                  usedIn="project"
                 />
                 {form.watch("thumbnailUrl") && (
                   <Button variant="ghost" type="button" onClick={() => form.setValue("thumbnailUrl", "")}>

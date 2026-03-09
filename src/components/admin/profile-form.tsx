@@ -236,6 +236,7 @@ export function ProfileForm({ profile, mediaAssets }: ProfileFormProps) {
                   onSelect={(asset) => form.setValue("avatarUrl", asset.publicUrl)}
                   filter="image"
                   assets={mediaAssets}
+                  usedIn="profile"
                 />
                 {avatarUrl && (
                   <Button
@@ -278,6 +279,7 @@ export function ProfileForm({ profile, mediaAssets }: ProfileFormProps) {
                   onSelect={(asset) => form.setValue("resumeUrl", asset.publicUrl)}
                   filter="pdf"
                   assets={mediaAssets}
+                  usedIn="profile"
                 />
                 {resumeUrl && (
                   <Button

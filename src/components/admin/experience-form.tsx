@@ -131,6 +131,7 @@ export function ExperienceForm({ experience, mediaAssets }: ExperienceFormProps)
               onSelect={(asset) => form.setValue("companyLogoUrl", asset.publicUrl)}
               filter="image"
               assets={mediaAssets}
+              usedIn="experience"
             />
             {form.watch("companyLogoUrl") && (
               <Button variant="ghost" type="button" onClick={() => form.setValue("companyLogoUrl", "")}>

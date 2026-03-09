@@ -149,6 +149,7 @@ export function EducationForm({ entry, mediaAssets }: EducationFormProps) {
               onSelect={(asset) => form.setValue("schoolLogoUrl", asset.publicUrl)}
               filter="image"
               assets={mediaAssets}
+              usedIn="education"
             />
             {form.watch("schoolLogoUrl") && (
               <Button variant="ghost" type="button" onClick={() => form.setValue("schoolLogoUrl", "")}>

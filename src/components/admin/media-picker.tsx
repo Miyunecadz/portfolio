@@ -17,6 +17,7 @@ interface MediaPickerProps {
   onSelect: (asset: MediaAsset) => void
   filter?: "image" | "pdf" | "all"
   assets: MediaAsset[]
+  usedIn?: string
 }
 
 export function MediaPicker({
@@ -24,6 +25,7 @@ export function MediaPicker({
   onSelect,
   filter = "all",
   assets,
+  usedIn = "misc",
 }: MediaPickerProps) {
   const [open, setOpen] = useState(false)
 
@@ -50,6 +52,7 @@ export function MediaPicker({
               selectable={true}
               filter={filter}
               onSelect={handleSelect}
+              usedIn={usedIn}
             />
           </TabsContent>
           <TabsContent value="upload">
@@ -58,6 +61,7 @@ export function MediaPicker({
               selectable={true}
               filter={filter}
               onSelect={handleSelect}
+              usedIn={usedIn}
             />
             <p className="text-xs text-muted-foreground mt-2">
               Upload a new file — it will appear in the Select tab after upload.
