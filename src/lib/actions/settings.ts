@@ -2,7 +2,6 @@
 
 import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
-import { eq } from "drizzle-orm"
 import { db } from "@/db"
 import { siteSettings } from "@/db/schema/app"
 import { type ActionResult } from "@/schemas/content"
@@ -12,9 +11,12 @@ export async function updateMaintenanceMode(
 ): Promise<ActionResult<void>> {
   try {
     await db
-      .update(siteSettings)
-      .set({ maintenanceMode: enabled, updatedAt: new Date() })
-      .where(eq(siteSettings.id, 1))
+      .insert(siteSettings)
+      .values({ id: 1, maintenanceMode: enabled, updatedAt: new Date() })
+      .onConflictDoUpdate({
+        target: siteSettings.id,
+        set: { maintenanceMode: enabled, updatedAt: new Date() },
+      })
 
     const cookieStore = await cookies()
     if (enabled) {
@@ -49,13 +51,21 @@ export async function updateCalendlySettings(data: {
     }
 
     await db
-      .update(siteSettings)
-      .set({
+      .insert(siteSettings)
+      .values({
+        id: 1,
         calendlyEnabled: data.calendlyEnabled,
         calendlyUrl: data.calendlyUrl ?? null,
         updatedAt: new Date(),
       })
-      .where(eq(siteSettings.id, 1))
+      .onConflictDoUpdate({
+        target: siteSettings.id,
+        set: {
+          calendlyEnabled: data.calendlyEnabled,
+          calendlyUrl: data.calendlyUrl ?? null,
+          updatedAt: new Date(),
+        },
+      })
 
     revalidatePath("/admin/settings")
     return { success: true, data: undefined }

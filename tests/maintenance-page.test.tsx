@@ -4,7 +4,7 @@
 // All content assertions will FAIL until Wave 2 lands. That is intentional.
 
 import { render, screen } from "@testing-library/react"
-import MaintenancePage from "@/app/(public)/maintenance/page"
+import MaintenancePage from "@/app/maintenance/page"
 import type { getSiteSettingsAdmin } from "@/lib/queries/settings"
 
 vi.mock("@/lib/queries/settings", () => ({

@@ -4,15 +4,19 @@
 // All assertions will FAIL until Wave 2 lands. That is intentional.
 
 import { updateMaintenanceMode, updateCalendlySettings } from "@/lib/actions/settings"
-import { db } from "@/db"
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 
+const { insertMock, valuesMock, onConflictDoUpdateMock } = vi.hoisted(() => {
+  const onConflictDoUpdateMock = vi.fn().mockResolvedValue([])
+  const valuesMock = vi.fn().mockReturnValue({ onConflictDoUpdate: onConflictDoUpdateMock })
+  const insertMock = vi.fn().mockReturnValue({ values: valuesMock })
+  return { insertMock, valuesMock, onConflictDoUpdateMock }
+})
+
 vi.mock("@/db", () => ({
   db: {
-    update: vi.fn().mockReturnThis(),
-    set: vi.fn().mockReturnThis(),
-    where: vi.fn().mockResolvedValue([]),
+    insert: insertMock,
   },
 }))
 
@@ -53,17 +57,17 @@ describe("updateMaintenanceMode (SET-05)", () => {
   })
 
   it("persists maintenanceMode to DB", async () => {
-    // Wave 2 must call db.update(siteSettings).set({ maintenanceMode: ... })
     await updateMaintenanceMode(true).catch(() => {})
-    expect(vi.mocked(db.update)).toHaveBeenCalled()
+    expect(insertMock).toHaveBeenCalled()
+    expect(onConflictDoUpdateMock).toHaveBeenCalled()
   })
 })
 
 describe("updateCalendlySettings (SET-06)", () => {
   it("saves calendlyEnabled and calendlyUrl to DB", async () => {
-    // Wave 2 must persist both fields via db.update
     await updateCalendlySettings({ calendlyEnabled: true, calendlyUrl: "https://cal.com/test" }).catch(() => {})
-    expect(vi.mocked(db.update)).toHaveBeenCalled()
+    expect(insertMock).toHaveBeenCalled()
+    expect(onConflictDoUpdateMock).toHaveBeenCalled()
   })
 
   it("calls revalidatePath after save", async () => {
