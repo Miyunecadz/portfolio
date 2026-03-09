@@ -2,7 +2,6 @@
 // Tests describe the modified uploadMediaAsset signature that Wave 2 will implement.
 // The function currently uses `section` as both the folder and usedIn value.
 // Wave 2 will decouple them: folder = "misc" always; usedIn = explicit argument.
-// All assertions will FAIL until Wave 2 lands. That is intentional.
 
 import { uploadMediaAsset } from "@/lib/actions/media"
 import { db } from "@/db"
@@ -37,6 +36,10 @@ vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
 }))
 
+// Cast to any so we can access mock-only properties (.values, .returning) on the db mock object
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const dbMock = db as any
+
 function makeFormData(fileName = "test.jpg", mimeType = "image/jpeg"): FormData {
   const file = new File(["dummy content"], fileName, { type: mimeType })
   const formData = new FormData()
@@ -46,24 +49,21 @@ function makeFormData(fileName = "test.jpg", mimeType = "image/jpeg"): FormData 
 
 beforeEach(() => {
   vi.clearAllMocks()
-  // Reset mock chain
-  vi.mocked(db.insert).mockReturnThis()
-  vi.mocked(db.insert(null as never).values).mockReturnThis()
-  vi.mocked(db.insert(null as never).values(null as never).returning).mockResolvedValue([
+  // Re-wire mock chain without calling through it (avoids consuming mock.calls[0])
+  vi.mocked(db.insert).mockReturnValue(db as never)
+  dbMock.values.mockReturnValue(db as never)
+  dbMock.returning.mockResolvedValue([
     { id: "uuid-1", publicUrl: "https://example.com/test.jpg", fileName: "test.jpg" },
-  ] as never)
+  ])
 })
 
 describe("uploadMediaAsset — usedIn tagging (MEDIA-07)", () => {
   it("stores usedIn='project' when called with usedIn='project'", async () => {
-    // Wave 2: uploadMediaAsset(formData, section, usedIn) decouples folder from usedIn
-    // The usedIn column must reflect the explicit argument
     const formData = makeFormData()
     await uploadMediaAsset(formData, "project")
 
-    const valuesCalls = vi.mocked(db.insert).mock.results
-    // Check that db.insert().values() was called with usedIn: "project"
-    const valuesCall = vi.mocked(db.insert(null as never).values).mock.calls[0]?.[0]
+    // dbMock.values is called by the insert chain — check first call args
+    const valuesCall = dbMock.values.mock.calls[0]?.[0]
     expect(valuesCall).toMatchObject({ usedIn: "project" })
   })
 
@@ -71,16 +71,15 @@ describe("uploadMediaAsset — usedIn tagging (MEDIA-07)", () => {
     const formData = makeFormData()
     await uploadMediaAsset(formData, "profile")
 
-    const valuesCall = vi.mocked(db.insert(null as never).values).mock.calls[0]?.[0]
+    const valuesCall = dbMock.values.mock.calls[0]?.[0]
     expect(valuesCall).toMatchObject({ usedIn: "profile" })
   })
 
   it("stores usedIn='misc' when no usedIn arg provided", async () => {
-    // Wave 2: default usedIn should be "misc" when no argument is passed
     const formData = makeFormData()
     await uploadMediaAsset(formData)
 
-    const valuesCall = vi.mocked(db.insert(null as never).values).mock.calls[0]?.[0]
+    const valuesCall = dbMock.values.mock.calls[0]?.[0]
     expect(valuesCall).toMatchObject({ usedIn: "misc" })
   })
 })

@@ -21,6 +21,7 @@ type UsedInEntry = { entity: string; name: string }
 
 export async function uploadMediaAsset(
   formData: FormData,
+  usedIn: string = "misc",
   section: string = "misc"
 ): Promise<ActionResult<{ id: string; publicUrl: string; fileName: string }>> {
   const file = formData.get("file") as File | null
@@ -62,7 +63,7 @@ export async function uploadMediaAsset(
         fileName: file.name,
         fileType: file.type,
         fileSizeBytes: file.size,
-        usedIn: section,
+        usedIn: usedIn,
       })
       .returning()
 
