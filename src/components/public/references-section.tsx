@@ -23,7 +23,7 @@ export function ReferencesSection({ references }: ReferencesSectionProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {references.map((ref) => (
-        <Card key={ref.id} className="h-full">
+        <Card key={ref.id} className="reference-card h-full">
           <CardContent className="p-6 flex flex-col gap-4">
             {/* Quote */}
             <blockquote className="text-foreground/80 italic leading-relaxed">

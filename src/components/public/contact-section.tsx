@@ -15,21 +15,23 @@ export function ContactSection({
   calendlyUrl,
 }: ContactSectionProps) {
   return (
-    <div>
-      <div className="max-w-2xl mx-auto px-4">
+    <div className="flex flex-col gap-12">
+      <div className="max-w-2xl mx-auto w-full px-4">
         {contactFormEnabled ? (
           <ContactForm />
         ) : (
           <p className="text-muted-foreground italic">Contact form is currently disabled.</p>
         )}
+      </div>
 
-        {calendlyEnabled && calendlyUrl && (
-          <div className="mt-12">
-            <h3 className="text-xl font-semibold mb-4">Schedule a Call</h3>
+      {calendlyEnabled && calendlyUrl && (
+        <div>
+          <h3 className="text-xl font-semibold mb-4 text-center">Schedule a Call</h3>
+          <div className="calendly-container">
             <CalendlyWidget url={calendlyUrl} />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

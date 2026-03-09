@@ -22,7 +22,7 @@ export function EducationSection({ education }: EducationSectionProps) {
   return (
     <div className="flex flex-col gap-6">
       {education.map((edu) => (
-        <div key={edu.id} className="flex items-start gap-4">
+        <div key={edu.id} className="education-entry flex items-start gap-4">
           {edu.schoolLogoUrl && (
             <div className="relative w-12 h-12 rounded-lg overflow-hidden border bg-background shrink-0">
               <Image

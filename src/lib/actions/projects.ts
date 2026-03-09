@@ -39,7 +39,7 @@ export async function createProject(formData: unknown): Promise<ActionResult<{ i
       .returning({ id: projects.id })
 
     await logActivity("created", "project", project.id, `Created project "${parsed.data.title}"`)
-    revalidateTag("projects", "max")
+    revalidateTag("projects", "default")
     revalidatePath("/admin/projects")
 
     return { success: true, data: { id: project.id } }
@@ -65,7 +65,7 @@ export async function updateProject(formData: unknown): Promise<ActionResult<{ i
       .where(eq(projects.id, id))
 
     await logActivity("updated", "project", id, `Updated project "${data.title}"`)
-    revalidateTag("projects", "max")
+    revalidateTag("projects", "default")
     revalidatePath("/admin/projects")
     revalidatePath(`/admin/projects/${id}/edit`)
 
@@ -86,7 +86,7 @@ export async function deleteProject(id: string): Promise<ActionResult> {
 
     await db.delete(projects).where(eq(projects.id, id))
     await logActivity("deleted", "project", id, `Deleted project "${project?.title ?? id}"`)
-    revalidateTag("projects", "max")
+    revalidateTag("projects", "default")
     revalidatePath("/admin/projects")
 
     return { success: true, data: undefined }

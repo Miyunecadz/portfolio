@@ -7,8 +7,8 @@ interface Experience {
   companyLogoUrl: string | null
   jobTitle: string
   employmentType: string
-  startDate: Date
-  endDate: Date | null
+  startDate: Date | string
+  endDate: Date | string | null
   isCurrentRole: boolean
   description: string | null
   techStackTags: string[] | null
@@ -18,15 +18,16 @@ interface ExperienceSectionProps {
   experiences: Experience[]
 }
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" })
+function formatDate(date: Date | string): string {
+  return new Date(date).toLocaleDateString("en-US", { month: "short", year: "numeric" })
 }
 
-function formatDuration(start: Date, end: Date | null, isCurrent: boolean): string {
-  const endDate = isCurrent ? new Date() : (end ?? new Date())
+function formatDuration(start: Date | string, end: Date | string | null, isCurrent: boolean): string {
+  const startDate = new Date(start)
+  const endDate = isCurrent ? new Date() : new Date(end ?? new Date())
   const months =
-    (endDate.getFullYear() - start.getFullYear()) * 12 +
-    (endDate.getMonth() - start.getMonth())
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    (endDate.getMonth() - startDate.getMonth())
   if (months < 12) return `${months}mo`
   const years = Math.floor(months / 12)
   const rem = months % 12
@@ -46,7 +47,7 @@ export function ExperienceSection({ experiences }: ExperienceSectionProps) {
           {/* Timeline dot */}
           <div className="experience-dot absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-background border-2 border-primary" />
 
-          <div className="flex flex-col gap-2">
+          <div className="experience-content flex flex-col gap-2">
             <div className="flex flex-wrap items-start gap-2">
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-foreground text-lg leading-tight">

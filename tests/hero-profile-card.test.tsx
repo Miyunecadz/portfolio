@@ -42,7 +42,6 @@ describe("HeroSection — hero profile card", () => {
     )
 
     expect(screen.getByAltText("Jane Doe")).toBeInTheDocument()
-    // fullName appears in both h1 and profile card — verify at least one instance
     expect(screen.getAllByText("Jane Doe").length).toBeGreaterThan(0)
     expect(screen.getByRole("link", { name: "GitHub" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "LinkedIn" })).toBeInTheDocument()
@@ -55,14 +54,15 @@ describe("HeroSection — hero profile card", () => {
         {...baseProps}
         fullName="Jane Doe"
         avatarUrl={null}
+        githubUrl="https://github.com/jane"
       />
     )
 
     expect(screen.getByText("JD")).toBeInTheDocument()
   })
 
-  // HERO-02b: Social row omitted when all social URLs are null
-  it("omits social links when all social URLs are null", () => {
+  // HERO-02b: Card not rendered when all social URLs are null
+  it("omits the identity bar when all social URLs are null", () => {
     render(
       <HeroSection
         {...baseProps}
@@ -75,23 +75,24 @@ describe("HeroSection — hero profile card", () => {
       />
     )
 
+    expect(screen.queryByTestId("hero-profile-card")).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "GitHub" })).not.toBeInTheDocument()
-    expect(screen.queryByRole("link", { name: "LinkedIn" })).not.toBeInTheDocument()
   })
 
-  // HERO-02c: Card wrapper has hidden md:block classes
-  it("card wrapper has hidden and md:block classes for desktop-only visibility", () => {
+  // HERO-02c: Card wrapper has hidden md:flex classes
+  it("card wrapper has hidden and md:flex classes for desktop-only visibility", () => {
     const { container } = render(
       <HeroSection
         {...baseProps}
         fullName="Test"
         avatarUrl={null}
+        githubUrl="https://github.com/test"
       />
     )
 
     const card = container.querySelector("[data-testid='hero-profile-card']")
     expect(card).toBeInTheDocument()
     expect(card?.className).toContain("hidden")
-    expect(card?.className).toContain("md:block")
+    expect(card?.className).toContain("md:flex")
   })
 })

@@ -55,6 +55,7 @@ export function ProjectsSection({ projects, tags }: ProjectsSectionProps) {
                 techStackTags={project.techStackTags ?? []}
                 thumbnail={project.thumbnailUrl}
                 isFeatured={project.isFeatured}
+                index={i}
               />
             </AnimateIn>
           ))}

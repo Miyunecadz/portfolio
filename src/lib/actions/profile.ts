@@ -29,7 +29,7 @@ export async function upsertProfile(formData: unknown): Promise<ActionResult<{ i
     }
 
     await logActivity("updated", "profile", profileId, "Updated profile")
-    revalidateTag("profile", "max")
+    revalidateTag("profile", "default")
     revalidatePath("/admin/profile")
 
     return { success: true, data: { id: profileId } }

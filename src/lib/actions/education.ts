@@ -13,7 +13,7 @@ export async function createEducation(formData: unknown): Promise<ActionResult<{
   try {
     const [entry] = await db.insert(education).values(parsed.data).returning({ id: education.id })
     await logActivity("created", "education", entry.id, `Created education "${parsed.data.schoolName}"`)
-    revalidateTag("education", "max")
+    revalidateTag("education", "default")
     revalidatePath("/admin/education")
     return { success: true, data: { id: entry.id } }
   } catch (e) {
@@ -29,7 +29,7 @@ export async function updateEducation(formData: unknown): Promise<ActionResult<{
   try {
     await db.update(education).set({ ...data, updatedAt: new Date() }).where(eq(education.id, id))
     await logActivity("updated", "education", id, `Updated education "${data.schoolName}"`)
-    revalidateTag("education", "max")
+    revalidateTag("education", "default")
     revalidatePath("/admin/education")
     return { success: true, data: { id } }
   } catch (e) {
@@ -43,7 +43,7 @@ export async function deleteEducation(id: string): Promise<ActionResult> {
     const [entry] = await db.select({ schoolName: education.schoolName }).from(education).where(eq(education.id, id)).limit(1)
     await db.delete(education).where(eq(education.id, id))
     await logActivity("deleted", "education", id, `Deleted education "${entry?.schoolName ?? id}"`)
-    revalidateTag("education", "max")
+    revalidateTag("education", "default")
     revalidatePath("/admin/education")
     return { success: true, data: undefined }
   } catch (e) {

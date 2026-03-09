@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ChevronDown, Github, Linkedin, Facebook, Globe } from "lucide-react"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Card } from "@/components/ui/card"
 
 interface HeroSectionProps {
   fullName: string
@@ -112,50 +111,52 @@ export function HeroSection({
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <a
-        href="#projects"
-        aria-label="Scroll to projects"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors group"
-      >
-        <span className="text-[10px] tracking-[0.2em] uppercase font-medium opacity-50 group-hover:opacity-100 transition-opacity">
-          Scroll
-        </span>
-        <ChevronDown className="w-5 h-5 animate-bounce" />
-      </a>
-
-      {/* Floating profile card — desktop only */}
-      <div
-        data-testid="hero-profile-card"
-        className="hidden md:block absolute bottom-8 left-8 z-10"
-      >
-        <Card className="rounded-xl ring-0 border border-border/30 backdrop-blur-sm bg-background/70 shadow-md px-3 py-2.5 gap-0">
-          <div className="flex items-center gap-2.5">
-            <Avatar size="lg">
+      {/* Bottom center: identity bar + scroll indicator stacked */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-10">
+        {/* Identity bar — desktop only */}
+        {socialLinks.length > 0 && (
+          <div
+            data-testid="hero-profile-card"
+            className="hidden md:flex items-center gap-3 px-4 py-2 rounded-full border border-border/30 backdrop-blur-md bg-background/60 shadow-sm"
+          >
+            <Avatar size="sm">
               <AvatarImage src={avatarUrl ?? undefined} alt={fullName} />
-              <AvatarFallback>{initials}</AvatarFallback>
+              <AvatarFallback className="text-[10px]">{initials}</AvatarFallback>
             </Avatar>
-            <span className="text-sm font-medium text-foreground whitespace-nowrap">
-              {fullName}
-            </span>
+
+            {socialLinks.length > 0 && (
+              <>
+                <span className="w-px h-4 bg-border/60 shrink-0" aria-hidden />
+                <div className="flex items-center gap-2">
+                  {socialLinks.map(({ href, Icon, label }) => (
+                    <a
+                      key={href}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
-          {socialLinks.length > 0 && (
-            <div className="flex items-center gap-2 mt-2 pl-0.5">
-              {socialLinks.map(({ href, Icon, label }) => (
-                <a
-                  key={href}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                </a>
-              ))}
-            </div>
-          )}
-        </Card>
+        )}
+
+        {/* Scroll indicator */}
+        <a
+          href="#projects"
+          aria-label="Scroll to projects"
+          className="flex flex-col items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors group"
+        >
+          <span className="text-[10px] tracking-[0.2em] uppercase font-medium opacity-50 group-hover:opacity-100 transition-opacity">
+            Scroll
+          </span>
+          <ChevronDown className="w-5 h-5 animate-bounce" />
+        </a>
       </div>
     </div>
   )

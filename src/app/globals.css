@@ -47,73 +47,80 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.58 0.22 27);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.809 0.105 251.813);
-  --chart-2: oklch(0.623 0.214 259.815);
-  --chart-3: oklch(0.546 0.245 262.881);
-  --chart-4: oklch(0.488 0.243 264.376);
-  --chart-5: oklch(0.424 0.199 265.638);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
+/* ─── Color overrides inside @layer base so they win over shadcn defaults */
+@layer base {
+  /* Light mode — cyan primary, cool off-white bg                          */
+  /* Untouched: secondary, accent — keeps admin hover states identical     */
+  :root {
+    --background: oklch(0.97 0.005 220);
+    --foreground: oklch(0.13 0.012 240);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.13 0.012 240);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.13 0.012 240);
+    --primary: oklch(0.47 0.185 196);
+    --primary-foreground: oklch(0.98 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.94 0.006 220);
+    --muted-foreground: oklch(0.52 0.012 225);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.58 0.22 27);
+    --border: oklch(0.88 0.008 220);
+    --input: oklch(0.88 0.008 220);
+    --ring: oklch(0.6 0.12 196);
+    --chart-1: oklch(0.809 0.105 251.813);
+    --chart-2: oklch(0.623 0.214 259.815);
+    --chart-3: oklch(0.546 0.245 262.881);
+    --chart-4: oklch(0.488 0.243 264.376);
+    --chart-5: oklch(0.424 0.199 265.638);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+  }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.87 0.00 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.371 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.809 0.105 251.813);
-  --chart-2: oklch(0.623 0.214 259.815);
-  --chart-3: oklch(0.546 0.245 262.881);
-  --chart-4: oklch(0.488 0.243 264.376);
-  --chart-5: oklch(0.424 0.199 265.638);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Dark mode — bright cyan primary, deep navy bg                         */
+  /* Untouched: secondary, accent — keeps admin hover states identical     */
+  .dark {
+    --background: oklch(0.115 0.018 240);
+    --foreground: oklch(0.93 0.005 220);
+    --card: oklch(0.155 0.016 240);
+    --card-foreground: oklch(0.93 0.005 220);
+    --popover: oklch(0.155 0.016 240);
+    --popover-foreground: oklch(0.93 0.005 220);
+    --primary: oklch(0.73 0.18 196);
+    --primary-foreground: oklch(0.1 0.015 240);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.22 0.014 235);
+    --muted-foreground: oklch(0.6 0.018 225);
+    --accent: oklch(0.371 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.73 0.18 196);
+    --chart-1: oklch(0.809 0.105 251.813);
+    --chart-2: oklch(0.623 0.214 259.815);
+    --chart-3: oklch(0.546 0.245 262.881);
+    --chart-4: oklch(0.488 0.243 264.376);
+    --chart-5: oklch(0.424 0.199 265.638);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+  }
 }
 
 @layer base {
@@ -145,4 +152,333 @@
     transform: none !important;
     transition: none !important;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PUBLIC PAGE STYLES — scoped under .public-layout
+   All rules below only affect the public-facing portfolio.
+   Admin panel is unaffected.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Typography — JetBrains Mono for headings only on public page ───── */
+.public-layout h1,
+.public-layout h2,
+.public-layout h3,
+.public-layout h4,
+.public-layout h5 {
+  font-family: var(--font-mono);
+}
+
+/* ─── Hero ────────────────────────────────────────────────────────────── */
+
+/* Dot grid — infrastructure diagram / graph paper feel */
+.public-layout .hero-root {
+  background-image: radial-gradient(
+    circle,
+    oklch(0.45 0.1 220 / 0.2) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
+}
+
+.dark .public-layout .hero-root {
+  background-image: radial-gradient(
+    circle,
+    oklch(0.73 0.18 196 / 0.07) 1px,
+    transparent 1px
+  );
+}
+
+/* Eyebrow — terminal comment style */
+.public-layout .hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.public-layout .hero-eyebrow::before {
+  content: '//';
+  opacity: 0.4;
+}
+
+/* ─── Section headings ────────────────────────────────────────────────── */
+
+.public-layout .section-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.public-layout .section-heading {
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+}
+
+/* Gradient fade instead of solid block */
+.public-layout .section-accent-bar {
+  background: linear-gradient(90deg, var(--color-primary), transparent) !important;
+  height: 2px !important;
+}
+
+/* ─── Experience timeline ─────────────────────────────────────────────── */
+
+.public-layout .experience-entry {
+  border-left-color: oklch(0.47 0.185 196 / 0.3);
+}
+
+.dark .public-layout .experience-entry {
+  border-left-color: oklch(0.73 0.18 196 / 0.22);
+}
+
+.public-layout .experience-dot {
+  border-color: var(--color-primary) !important;
+  background-color: var(--color-background) !important;
+}
+
+.dark .public-layout .experience-dot {
+  box-shadow: 0 0 10px 3px oklch(0.73 0.18 196 / 0.45);
+}
+
+.public-layout .company-name {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
+}
+
+/* ─── Skills ──────────────────────────────────────────────────────────── */
+
+.public-layout .skills-category-heading {
+  font-family: var(--font-mono) !important;
+  letter-spacing: 0.15em !important;
+}
+
+.public-layout .skill-chip {
+  font-family: var(--font-mono);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.public-layout .skill-chip:hover {
+  border-color: oklch(0.47 0.185 196 / 0.5);
+}
+
+.dark .public-layout .skill-chip {
+  border-color: oklch(1 0 0 / 0.13);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06);
+}
+
+.dark .public-layout .skill-chip:hover {
+  border-color: oklch(0.73 0.18 196 / 0.4);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 0 1px oklch(0.73 0.18 196 / 0.12);
+}
+
+/* ─── Project cards ───────────────────────────────────────────────────── */
+
+/* Light mode: make cards pop off the background */
+.public-layout .project-card {
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.07), 0 4px 16px oklch(0 0 0 / 0.05);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.dark .public-layout .project-card {
+  box-shadow:
+    0 0 0 1px oklch(1 0 0 / 0.12),
+    inset 0 1px 0 oklch(1 0 0 / 0.07),
+    0 2px 8px oklch(0 0 0 / 0.4);
+}
+
+/* Thumbnail gap fix — Card has py-4 which pushes the first child div down */
+.public-layout .project-card .project-thumbnail {
+  margin-top: -1rem;
+}
+
+/* Light mode hover: glow in cyan */
+.public-layout .project-card:hover {
+  border-color: oklch(0.47 0.185 196 / 0.5) !important;
+  box-shadow:
+    0 0 0 1px oklch(0.47 0.185 196 / 0.12),
+    0 8px 32px oklch(0.47 0.185 196 / 0.12),
+    0 2px 8px oklch(0 0 0 / 0.08) !important;
+}
+
+/* Dark mode hover: stronger glow */
+.dark .public-layout .project-card:hover {
+  border-color: oklch(0.73 0.18 196 / 0.4) !important;
+  box-shadow:
+    0 0 0 1px oklch(0.73 0.18 196 / 0.1),
+    0 0 40px oklch(0.73 0.18 196 / 0.1),
+    0 24px 48px -12px oklch(0 0 0 / 0.6) !important;
+}
+
+/* Terminal window chrome on no-thumbnail placeholders */
+.public-layout .project-thumbnail-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.875rem;
+  background: oklch(0 0 0 / 0.08);
+  border-bottom: 1px solid oklch(0 0 0 / 0.07);
+  z-index: 1;
+}
+
+.dark .public-layout .project-thumbnail-placeholder::before {
+  background: oklch(0 0 0 / 0.28);
+  border-bottom-color: oklch(1 0 0 / 0.05);
+}
+
+.public-layout .project-thumbnail-placeholder::after {
+  content: '● ● ●';
+  position: absolute;
+  top: 0.5rem;
+  left: 0.7rem;
+  font-size: 0.38rem;
+  color: oklch(0.45 0 0 / 0.4);
+  letter-spacing: 0.3em;
+  line-height: 1;
+  z-index: 2;
+}
+
+.dark .public-layout .project-thumbnail-placeholder::after {
+  color: oklch(0.7 0 0 / 0.28);
+}
+
+.public-layout .project-title {
+  font-family: var(--font-mono);
+  letter-spacing: -0.01em;
+}
+
+.public-layout .tech-tag {
+  font-family: var(--font-mono) !important;
+  font-size: 0.65rem !important;
+  letter-spacing: 0.02em;
+}
+
+/* ─── Reference cards ─────────────────────────────────────────────────── */
+
+.public-layout .reference-card {
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.07), 0 4px 16px oklch(0 0 0 / 0.05);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dark .public-layout .reference-card {
+  box-shadow:
+    0 0 0 1px oklch(1 0 0 / 0.12),
+    inset 0 1px 0 oklch(1 0 0 / 0.07),
+    0 2px 8px oklch(0 0 0 / 0.4);
+}
+
+.public-layout .reference-card:hover {
+  transform: translateY(-3px);
+  border-color: oklch(0.47 0.185 196 / 0.45) !important;
+  box-shadow:
+    0 0 0 1px oklch(0.47 0.185 196 / 0.1),
+    0 8px 28px oklch(0.47 0.185 196 / 0.1),
+    0 4px 12px oklch(0 0 0 / 0.07) !important;
+}
+
+.dark .public-layout .reference-card:hover {
+  border-color: oklch(0.73 0.18 196 / 0.35) !important;
+  box-shadow:
+    0 0 0 1px oklch(0.73 0.18 196 / 0.08),
+    0 0 32px oklch(0.73 0.18 196 / 0.1),
+    0 20px 48px -12px oklch(0 0 0 / 0.55) !important;
+}
+
+/* ─── Education entries ───────────────────────────────────────────────── */
+
+.public-layout .education-entry {
+  padding: 1rem 1.25rem;
+  border-radius: calc(var(--radius) * 0.8);
+  border: 1px solid oklch(0.88 0.008 220 / 0.9);
+  background: var(--color-card);
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.07), 0 4px 16px oklch(0 0 0 / 0.04);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dark .public-layout .education-entry {
+  border-color: oklch(1 0 0 / 0.13);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.07),
+    0 2px 8px oklch(0 0 0 / 0.4);
+}
+
+.public-layout .education-entry:hover {
+  transform: translateY(-3px);
+  border-color: oklch(0.47 0.185 196 / 0.45) !important;
+  box-shadow:
+    0 0 0 1px oklch(0.47 0.185 196 / 0.1),
+    0 8px 28px oklch(0.47 0.185 196 / 0.1),
+    0 4px 12px oklch(0 0 0 / 0.07) !important;
+}
+
+.dark .public-layout .education-entry:hover {
+  border-color: oklch(0.73 0.18 196 / 0.35) !important;
+  box-shadow:
+    0 0 0 1px oklch(0.73 0.18 196 / 0.08),
+    0 0 28px oklch(0.73 0.18 196 / 0.09),
+    0 20px 40px -10px oklch(0 0 0 / 0.55) !important;
+}
+
+/* ─── Experience inner card ───────────────────────────────────────────── */
+
+.public-layout .experience-content {
+  padding: 1rem 1.25rem;
+  border-radius: calc(var(--radius) * 0.8);
+  border: 1px solid oklch(0.88 0.008 220 / 0.9);
+  background: var(--color-card);
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.07), 0 4px 16px oklch(0 0 0 / 0.04);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dark .public-layout .experience-content {
+  border-color: oklch(1 0 0 / 0.13);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.07),
+    0 2px 8px oklch(0 0 0 / 0.4);
+}
+
+.public-layout .experience-content:hover {
+  border-color: oklch(0.47 0.185 196 / 0.45) !important;
+  box-shadow:
+    0 0 0 1px oklch(0.47 0.185 196 / 0.1),
+    0 8px 28px oklch(0.47 0.185 196 / 0.1),
+    0 4px 12px oklch(0 0 0 / 0.07) !important;
+}
+
+.dark .public-layout .experience-content:hover {
+  border-color: oklch(0.73 0.18 196 / 0.35) !important;
+  box-shadow:
+    0 0 0 1px oklch(0.73 0.18 196 / 0.08),
+    0 0 28px oklch(0.73 0.18 196 / 0.09),
+    0 20px 40px -10px oklch(0 0 0 / 0.55) !important;
+}
+
+/* ─── Skills chips — more visible in light mode ───────────────────────── */
+
+.public-layout .skill-chip {
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.06);
+}
+
+/* ─── Calendly widget container ───────────────────────────────────────── */
+
+.public-layout .calendly-container {
+  border-radius: calc(var(--radius) * 1.2);
+  overflow: hidden;
+  border: 1px solid oklch(0.88 0.008 220 / 0.9);
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.07), 0 8px 32px oklch(0 0 0 / 0.06);
+}
+
+.dark .public-layout .calendly-container {
+  border-color: oklch(1 0 0 / 0.1);
+  box-shadow: 0 1px 4px oklch(0 0 0 / 0.4), 0 8px 32px oklch(0 0 0 / 0.3);
 }

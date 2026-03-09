@@ -13,7 +13,7 @@ export async function createReference(formData: unknown): Promise<ActionResult<{
   try {
     const [ref] = await db.insert(referencesTable).values(parsed.data).returning({ id: referencesTable.id })
     await logActivity("created", "reference", ref.id, `Created reference from "${parsed.data.name}"`)
-    revalidateTag("references", "max")
+    revalidateTag("references", "default")
     revalidatePath("/admin/references")
     return { success: true, data: { id: ref.id } }
   } catch (e) {
@@ -29,7 +29,7 @@ export async function updateReference(formData: unknown): Promise<ActionResult<{
   try {
     await db.update(referencesTable).set({ ...data, updatedAt: new Date() }).where(eq(referencesTable.id, id))
     await logActivity("updated", "reference", id, `Updated reference from "${data.name}"`)
-    revalidateTag("references", "max")
+    revalidateTag("references", "default")
     revalidatePath("/admin/references")
     return { success: true, data: { id } }
   } catch (e) {
@@ -43,7 +43,7 @@ export async function deleteReference(id: string): Promise<ActionResult> {
     const [ref] = await db.select({ name: referencesTable.name }).from(referencesTable).where(eq(referencesTable.id, id)).limit(1)
     await db.delete(referencesTable).where(eq(referencesTable.id, id))
     await logActivity("deleted", "reference", id, `Deleted reference from "${ref?.name ?? id}"`)
-    revalidateTag("references", "max")
+    revalidateTag("references", "default")
     revalidatePath("/admin/references")
     return { success: true, data: undefined }
   } catch (e) {

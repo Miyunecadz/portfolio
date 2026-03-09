@@ -10,12 +10,6 @@ import {
   ChatCircleText,
   GraduationCap,
   Images,
-  PaintBrush,
-  Palette,
-  Rows,
-  GithubLogo,
-  LinkedinLogo,
-  Robot,
   Gear,
   Envelope,
 } from "@phosphor-icons/react"
@@ -46,20 +40,12 @@ const navItems: NavItem[] = [
   { href: "/admin/references", label: "References", icon: ChatCircleText, group: "Content" },
   { href: "/admin/education", label: "Education", icon: GraduationCap, group: "Content" },
   { href: "/admin/media", label: "Media", icon: Images, group: "Content" },
-  // Appearance
-  { href: "/admin/appearance/templates", label: "Templates", icon: PaintBrush, group: "Appearance" },
-  { href: "/admin/appearance/colors-fonts", label: "Colors & Fonts", icon: Palette, group: "Appearance" },
-  { href: "/admin/appearance/sections", label: "Sections & Order", icon: Rows, group: "Appearance" },
-  // Integrations
-  { href: "/admin/integrations/github", label: "GitHub", icon: GithubLogo, group: "Integrations" },
-  { href: "/admin/integrations/linkedin", label: "LinkedIn", icon: LinkedinLogo, group: "Integrations" },
-  { href: "/admin/integrations/ai-chat", label: "AI Chat", icon: Robot, group: "Integrations" },
   // Settings
   { href: "/admin/settings", label: "Settings", icon: Gear, group: "Settings" },
   { href: "/admin/inbox", label: "Inbox", icon: Envelope, group: "Settings" },
 ]
 
-const groups = ["Content", "Appearance", "Integrations", "Settings"]
+const groups = ["Content", "Settings"]
 
 interface SidebarNavProps {
   unreadCount: number
