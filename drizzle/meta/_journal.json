@@ -29,6 +29,20 @@
       "when": 1773024078277,
       "tag": "0003_drop_theme_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1773064750597,
+      "tag": "0004_awesome_mantis",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1773075253876,
+      "tag": "0005_previous_nebula",
+      "breakpoints": true
     }
   ]
 }
