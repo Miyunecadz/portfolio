@@ -3,7 +3,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { getPublishedProjectBySlug, getPublishedProjects } from "@/lib/queries/public"
+import { getPublishedProjectBySlug, getPublishedProjects, getProjectScreenshotsPublic } from "@/lib/queries/public"
+import { ProjectGalleryHero } from "./project-gallery-hero"
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>
@@ -22,6 +23,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
     notFound()
   }
 
+  const screenshots = await getProjectScreenshotsPublic(project.id)
+
   const techTags = (project.techStackTags as string[]) ?? []
 
   return (
@@ -39,8 +42,10 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       </div>
 
       <main className="max-w-3xl mx-auto px-4 py-12">
-        {/* Hero image */}
-        {project.thumbnailUrl && (
+        {/* Hero image — gallery when screenshots exist, thumbnail fallback when none */}
+        {screenshots.length > 0 ? (
+          <ProjectGalleryHero screenshots={screenshots} projectTitle={project.title} />
+        ) : project.thumbnailUrl ? (
           <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden mb-8 bg-muted">
             <Image
               src={project.thumbnailUrl}
@@ -51,7 +56,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               sizes="(min-width: 768px) 768px, 100vw"
             />
           </div>
-        )}
+        ) : null}
 
         {/* Title */}
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3">
