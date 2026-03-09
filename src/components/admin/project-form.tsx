@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RichTextEditor } from "@/components/admin/rich-text-editor"
 import { ChipInput } from "@/components/admin/chip-input"
 import { MediaPicker } from "@/components/admin/media-picker"
+import { ScreenshotsManager } from "@/components/admin/screenshots-manager"
 import {
   createProjectSchema,
   updateProjectSchema,
@@ -29,12 +30,21 @@ import { createProject, updateProject } from "@/lib/actions/projects"
 import type { Project } from "@/lib/queries/projects"
 import type { MediaAsset } from "@/lib/queries/media"
 
+interface ScreenshotItem {
+  id: string
+  publicUrl: string
+  caption: string | null
+  sortOrder: number
+  storagePath: string
+}
+
 interface ProjectFormProps {
   project?: Project
   mediaAssets: MediaAsset[]
+  initialScreenshots?: ScreenshotItem[]
 }
 
-export function ProjectForm({ project, mediaAssets }: ProjectFormProps) {
+export function ProjectForm({ project, mediaAssets, initialScreenshots = [] }: ProjectFormProps) {
   const router = useRouter()
   const slugManuallyEdited = useRef(false)
 
@@ -213,6 +223,14 @@ export function ProjectForm({ project, mediaAssets }: ProjectFormProps) {
                 )}
               </div>
             </div>
+
+            {/* Screenshots — only shown when editing an existing project */}
+            {project && (
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-foreground">Screenshots</label>
+                <ScreenshotsManager projectId={project.id} initialScreenshots={initialScreenshots} />
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="casestudy" className="space-y-4 pt-4">
