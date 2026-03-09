@@ -5,6 +5,7 @@
 
 import { render, screen } from "@testing-library/react"
 import MaintenancePage from "@/app/(public)/maintenance/page"
+import type { getSiteSettingsAdmin } from "@/lib/queries/settings"
 
 vi.mock("@/lib/queries/settings", () => ({
   getSiteSettingsAdmin: vi.fn().mockResolvedValue({
@@ -46,7 +47,7 @@ describe("MaintenancePage (SET-05)", () => {
       maintenanceMode: true,
       calendlyEnabled: false,
       calendlyUrl: null,
-    })
+    } as Awaited<ReturnType<typeof getSiteSettingsAdmin>>)
 
     await renderMaintenancePage()
     expect(screen.queryByText("Back soon!")).not.toBeNull()

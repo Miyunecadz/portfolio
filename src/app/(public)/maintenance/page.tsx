@@ -1,12 +1,27 @@
-// Wave 0 stub — Wave 2 (07-02) will implement this page.
-// The exported default renders a placeholder; real content lands in Wave 2.
+import { getSiteSettingsAdmin } from "@/lib/queries/settings"
+import { getProfilePublic } from "@/lib/queries/public"
 
 export default async function MaintenancePage() {
-  // Wave 2 will fetch site settings and profile to render a real maintenance page.
-  // Stub intentionally returns minimal JSX so Wave 0 tests fail on content assertions.
+  const [settings, profile] = await Promise.all([
+    getSiteSettingsAdmin(),
+    getProfilePublic(),
+  ])
+  const message =
+    settings?.maintenanceMessage ?? "We're down for maintenance, check back soon."
+  const email = profile?.email ?? null
+
   return (
-    <main>
-      <p>Maintenance page — Wave 2 pending</p>
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8 text-center">
+      <h1 className="text-3xl font-bold">{settings?.siteTitle ?? "Portfolio"}</h1>
+      <p className="max-w-md text-muted-foreground">{message}</p>
+      {email && (
+        <p className="text-sm">
+          Need to get in touch?{" "}
+          <a href={`mailto:${email}`} className="underline">
+            {email}
+          </a>
+        </p>
+      )}
     </main>
   )
 }
