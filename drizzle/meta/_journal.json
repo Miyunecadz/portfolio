@@ -15,6 +15,20 @@
       "when": 1772933686413,
       "tag": "0001_magical_pestilence",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772948092856,
+      "tag": "0002_illegal_wrecker",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773024078277,
+      "tag": "0003_drop_theme_tables",
+      "breakpoints": true
     }
   ]
 }

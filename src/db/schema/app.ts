@@ -124,27 +124,6 @@ export const education = pgTable("education", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
 
-// ─── THEMES ───────────────────────────────────────────────────────────────
-export const themes = pgTable("themes", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  name: varchar("name", { length: 100 }).notNull(),
-  templateName: varchar("template_name", { length: 50 }).notNull(),
-  config: jsonb("config").notNull().default({}),
-  isDraft: boolean("is_draft").default(false).notNull(),
-  previewToken: text("preview_token"),
-  previewTokenExpiry: timestamp("preview_token_expiry"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-})
-
-// ─── ACTIVE THEME ─────────────────────────────────────────────────────────
-// Single-row table (id = 1). Never delete this row.
-export const activeTheme = pgTable("active_theme", {
-  id: integer("id").primaryKey().default(1),
-  themeId: uuid("theme_id").references(() => themes.id),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-})
-
 // ─── AI KNOWLEDGE CHUNKS ──────────────────────────────────────────────────
 // pgvector MUST be enabled in Supabase before this migration runs
 // embedding dimensions = 1536 (OpenAI text-embedding-3-small)
@@ -212,6 +191,7 @@ export const siteSettings = pgTable("site_settings", {
   calendlyEnabled: boolean("calendly_enabled").default(false).notNull(),
   calendlyUrl: text("calendly_url"),
   maintenanceMode: boolean("maintenance_mode").default(false).notNull(),
+  maintenanceMessage: text("maintenance_message"),
   robotsContent: text("robots_content"),
   sectionOrdering: jsonb("section_ordering")
     .$type<Array<{ key: string; label: string; isVisible: boolean; sortOrder: number }>>()
