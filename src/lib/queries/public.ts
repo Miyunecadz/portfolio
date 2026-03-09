@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache"
 import { db } from "@/db"
 import {
   projects,
+  projectScreenshots,
   experiences,
   skills,
   skillCategories,
@@ -55,6 +56,19 @@ export const getPublishedProjectBySlug = unstable_cache(
     return project
   },
   ["public-project-by-slug"],
+  { tags: ["projects"] }
+)
+
+// PROJ-15: public screenshots query — ISR cached, busts with "projects" tag
+export const getProjectScreenshotsPublic = unstable_cache(
+  async (projectId: string) => {
+    return db
+      .select()
+      .from(projectScreenshots)
+      .where(eq(projectScreenshots.projectId, projectId))
+      .orderBy(projectScreenshots.sortOrder)
+  },
+  ["public-project-screenshots"],
   { tags: ["projects"] }
 )
 
