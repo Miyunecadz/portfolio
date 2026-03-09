@@ -45,7 +45,7 @@ vi.mock("@/db", () => ({
 }))
 
 vi.mock("@/lib/activity", () => ({ logActivity: vi.fn() }))
-vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
+vi.mock("next/cache", () => ({ revalidatePath: vi.fn(), revalidateTag: vi.fn() }))
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dbMock = db as any
@@ -128,8 +128,10 @@ describe("updateScreenshotCaption", () => {
 
 describe("deleteScreenshot", () => {
   it("calls db.delete + storage.remove and rewrites sort order", async () => {
-    dbMock.from.mockResolvedValueOnce([
-      { id: "screenshot-id-1", storagePath: "screenshots/proj/img.jpg", projectId: "project-abc", sortOrder: 0 },
+    // First limit() call: returns the screenshot to fetch storagePath + projectId
+    // Second orderBy() call: returns remaining screenshots for gap-closing reorder
+    dbMock.limit.mockResolvedValueOnce([
+      { id: "screenshot-id-1", storagePath: "screenshots/proj/img.jpg", projectId: "project-abc" },
     ])
 
     const result = await deleteScreenshot("screenshot-id-1")
