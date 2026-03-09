@@ -58,6 +58,19 @@ export const projects = pgTable("projects", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
 
+// ─── PROJECT SCREENSHOTS ──────────────────────────────────────────────────
+export const projectScreenshots = pgTable("project_screenshots", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  storagePath: text("storage_path").notNull(),
+  publicUrl: text("public_url").notNull(),
+  caption: text("caption"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
 // ─── EXPERIENCES ──────────────────────────────────────────────────────────
 export const experiences = pgTable("experiences", {
   id: uuid("id").defaultRandom().primaryKey(),
