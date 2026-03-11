@@ -1,5 +1,5 @@
-import { unstable_cache } from "next/cache"
-import { db } from "@/db"
+import { unstable_cache } from "next/cache";
+import { db } from "@/db";
 import {
   projects,
   projectScreenshots,
@@ -10,8 +10,9 @@ import {
   education,
   profile,
   siteSettings,
-} from "@/db/schema/app"
-import { eq, desc, and, sql } from "drizzle-orm"
+  aiRateLimits,
+} from "@/db/schema/app";
+import { eq, desc, and, sql } from "drizzle-orm";
 
 // ─── PROJECTS ─────────────────────────────────────────────────────────────
 
@@ -22,11 +23,11 @@ export const getPublishedProjects = unstable_cache(
       .select()
       .from(projects)
       .where(eq(projects.status, "published"))
-      .orderBy(desc(projects.isFeatured), desc(projects.createdAt))
+      .orderBy(desc(projects.isFeatured), desc(projects.createdAt));
   },
   ["public-published-projects"],
-  { tags: ["projects"] }
-)
+  { tags: ["projects"] },
+);
 
 // PROJ-06: filter by tech stack tag using JSONB @> operator
 // Cannot use eq() for array element containment — must use sql template.
@@ -37,13 +38,13 @@ export const getPublishedProjectsByTag = unstable_cache(
       .from(projects)
       .where(
         sql`${projects.status} = 'published'
-            AND ${projects.techStackTags} @> ${JSON.stringify([tag])}::jsonb`
+            AND ${projects.techStackTags} @> ${JSON.stringify([tag])}::jsonb`,
       )
-      .orderBy(desc(projects.isFeatured), desc(projects.createdAt))
+      .orderBy(desc(projects.isFeatured), desc(projects.createdAt));
   },
   ["public-projects-by-tag"],
-  { tags: ["projects"] }
-)
+  { tags: ["projects"] },
+);
 
 // Single project by slug — for project detail page in Phase 4
 export const getPublishedProjectBySlug = unstable_cache(
@@ -52,12 +53,12 @@ export const getPublishedProjectBySlug = unstable_cache(
       .select()
       .from(projects)
       .where(and(eq(projects.slug, slug), eq(projects.status, "published")))
-      .limit(1)
-    return project
+      .limit(1);
+    return project;
   },
   ["public-project-by-slug"],
-  { tags: ["projects"] }
-)
+  { tags: ["projects"] },
+);
 
 // PROJ-15: public screenshots query — ISR cached, busts with "projects" tag
 export const getProjectScreenshotsPublic = unstable_cache(
@@ -66,11 +67,11 @@ export const getProjectScreenshotsPublic = unstable_cache(
       .select()
       .from(projectScreenshots)
       .where(eq(projectScreenshots.projectId, projectId))
-      .orderBy(projectScreenshots.sortOrder)
+      .orderBy(projectScreenshots.sortOrder);
   },
   ["public-project-screenshots"],
-  { tags: ["projects"] }
-)
+  { tags: ["projects"] },
+);
 
 // All unique tech tags from published projects — for filter UI in Phase 4
 export const getPublishedProjectTags = unstable_cache(
@@ -78,28 +79,25 @@ export const getPublishedProjectTags = unstable_cache(
     const rows = await db
       .select({ tags: projects.techStackTags })
       .from(projects)
-      .where(eq(projects.status, "published"))
+      .where(eq(projects.status, "published"));
     // Flatten and deduplicate all tags across all projects
-    const all = rows.flatMap((r) => (r.tags as string[]) ?? [])
-    return [...new Set(all)].sort()
+    const all = rows.flatMap((r) => (r.tags as string[]) ?? []);
+    return [...new Set(all)].sort();
   },
   ["public-project-tags"],
-  { tags: ["projects"] }
-)
+  { tags: ["projects"] },
+);
 
 // ─── EXPERIENCE ───────────────────────────────────────────────────────────
 
 // EXP-05: sorted by startDate descending; no isVisible filter on experience
 export const getPublishedExperiences = unstable_cache(
   async () => {
-    return db
-      .select()
-      .from(experiences)
-      .orderBy(desc(experiences.startDate))
+    return db.select().from(experiences).orderBy(desc(experiences.startDate));
   },
   ["public-experiences"],
-  { tags: ["experience"] }
-)
+  { tags: ["experience"] },
+);
 
 // ─── SKILLS ───────────────────────────────────────────────────────────────
 
@@ -119,20 +117,20 @@ export const getVisibleSkillsByCategory = unstable_cache(
       .from(skills)
       .leftJoin(skillCategories, eq(skills.categoryId, skillCategories.id))
       .where(eq(skills.isVisible, true))
-      .orderBy(skillCategories.name, skills.sortOrder, skills.name)
+      .orderBy(skillCategories.name, skills.sortOrder, skills.name);
 
     // Group into { [categoryName]: Skill[] } for easy rendering
-    const grouped: Record<string, typeof rows> = {}
+    const grouped: Record<string, typeof rows> = {};
     for (const skill of rows) {
-      const cat = skill.categoryName ?? "Other"
-      if (!grouped[cat]) grouped[cat] = []
-      grouped[cat].push(skill)
+      const cat = skill.categoryName ?? "Other";
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(skill);
     }
-    return grouped
+    return grouped;
   },
   ["public-skills"],
-  { tags: ["skills"] }
-)
+  { tags: ["skills"] },
+);
 
 // ─── REFERENCES ───────────────────────────────────────────────────────────
 
@@ -143,11 +141,11 @@ export const getVisibleReferences = unstable_cache(
       .select()
       .from(referencesTable)
       .where(eq(referencesTable.isVisible, true))
-      .orderBy(desc(referencesTable.createdAt))
+      .orderBy(desc(referencesTable.createdAt));
   },
   ["public-references"],
-  { tags: ["references"] }
-)
+  { tags: ["references"] },
+);
 
 // ─── EDUCATION ────────────────────────────────────────────────────────────
 
@@ -158,23 +156,23 @@ export const getVisibleEducation = unstable_cache(
       .select()
       .from(education)
       .where(eq(education.isVisible, true))
-      .orderBy(desc(education.startYear))
+      .orderBy(desc(education.startYear));
   },
   ["public-education"],
-  { tags: ["education"] }
-)
+  { tags: ["education"] },
+);
 
 // ─── PROFILE ──────────────────────────────────────────────────────────────
 
 // Single profile row — used by Phase 4 hero section (PROF-04, PROF-05, PROF-06)
 export const getProfilePublic = unstable_cache(
   async () => {
-    const [row] = await db.select().from(profile).limit(1)
-    return row
+    const [row] = await db.select().from(profile).limit(1);
+    return row;
   },
   ["public-profile"],
-  { tags: ["profile"] }
-)
+  { tags: ["profile"] },
+);
 
 // ─── SITE SETTINGS ────────────────────────────────────────────────────────
 
@@ -188,9 +186,26 @@ export const getSiteSettingsPublic = unstable_cache(
         calendlyUrl: siteSettings.calendlyUrl,
       })
       .from(siteSettings)
-      .limit(1)
-    return row ?? { contactFormEnabled: true, calendlyEnabled: false, calendlyUrl: null }
+      .limit(1);
+    return (
+      row ?? {
+        contactFormEnabled: true,
+        calendlyEnabled: false,
+        calendlyUrl: null,
+      }
+    );
   },
   ["public-site-settings"],
-  { tags: ["site-settings"] }
-)
+  { tags: ["site-settings"] },
+);
+
+// ─── Chatbot ────────────────────────────────────────────────────────
+// Query to get remaining chats based on IP
+export async function getRateLimitRemaining(ip: string): Promise<number> {
+  const today = new Date().toISOString().slice(0, 10);
+  const [row] = await db
+    .select({ count: aiRateLimits.count })
+    .from(aiRateLimits)
+    .where(and(eq(aiRateLimits.ip, ip), eq(aiRateLimits.date, today)));
+  return Math.max(0, 20 - (row?.count ?? 0));
+}
