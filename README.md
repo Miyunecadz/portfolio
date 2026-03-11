@@ -2,7 +2,7 @@
 
 A self-hosted portfolio and CMS built with Next.js 16. Manage projects, experience, and content through a private admin interface, while presenting a public-facing portfolio site backed by ISR-cached pages.
 
-**Stack:** Next.js 16 · React 19 · TypeScript · Drizzle ORM · PostgreSQL (Supabase) · BetterAuth · Tailwind v4 · shadcn/ui
+**Stack:** Next.js 16 · React 19 · TypeScript · Drizzle ORM · PostgreSQL (Supabase) · BetterAuth · Tailwind v4 · shadcn/ui · Groq
 
 **Key features:**
 - Public portfolio pages with ISR caching
@@ -12,6 +12,7 @@ A self-hosted portfolio and CMS built with Next.js 16. Manage projects, experien
 - File uploads via Supabase Storage
 - Contact form via Resend
 - OAuth account connections (Google, GitHub, LinkedIn)
+- "Ask JV" AI chat widget — floating chatbot backed by Groq LLM, speaks as your persona, rate-limited to 20 messages/day per IP
 
 ---
 
@@ -22,6 +23,7 @@ A self-hosted portfolio and CMS built with Next.js 16. Manage projects, experien
 - Node.js 20+
 - A [Supabase](https://supabase.com) project (PostgreSQL + Storage)
 - OAuth apps for Google, GitHub, and LinkedIn
+- A [Groq](https://console.groq.com) API key (free tier, required for the AI chat widget)
 
 ### 1. Install dependencies
 
