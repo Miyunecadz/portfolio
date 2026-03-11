@@ -9,7 +9,7 @@ export async function markAsRead(id: string) {
     .update(contactSubmissions)
     .set({ status: "read", updatedAt: new Date() })
     .where(eq(contactSubmissions.id, id))
-  revalidatePath("/admin/contact")
+  revalidatePath("/admin/inbox")
 }
 
 export async function archiveSubmission(id: string) {
@@ -17,10 +17,10 @@ export async function archiveSubmission(id: string) {
     .update(contactSubmissions)
     .set({ status: "archived", updatedAt: new Date() })
     .where(eq(contactSubmissions.id, id))
-  revalidatePath("/admin/contact")
+  revalidatePath("/admin/inbox")
 }
 
 export async function deleteSubmission(id: string) {
   await db.delete(contactSubmissions).where(eq(contactSubmissions.id, id))
-  revalidatePath("/admin/contact")
+  revalidatePath("/admin/inbox")
 }
