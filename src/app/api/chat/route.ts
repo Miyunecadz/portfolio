@@ -48,32 +48,36 @@ export async function POST(request: Request): Promise<Response> {
   const today = new Date().toISOString().slice(0, 10)
 
   // 4. Atomic upsert into aiRateLimits
-  let row: { count: number }
-  try {
-    const [result] = await db
-      .insert(aiRateLimits)
-      .values({ ip, date: today, count: 1 })
-      .onConflictDoUpdate({
-        target: [aiRateLimits.ip, aiRateLimits.date],
-        set: { count: sql`${aiRateLimits.count} + 1` },
-      })
-      .returning({ count: aiRateLimits.count })
+  const isDev = process.env.NODE_ENV === "development"
 
-    if (!result) {
+  let remaining = 20
+
+  if (!isDev) {
+    let row: { count: number }
+    try {
+      const [result] = await db
+        .insert(aiRateLimits)
+        .values({ ip, date: today, count: 1 })
+        .onConflictDoUpdate({
+          target: [aiRateLimits.ip, aiRateLimits.date],
+          set: { count: sql`${aiRateLimits.count} + 1` },
+        })
+        .returning({ count: aiRateLimits.count })
+
+      if (!result) {
+        return Response.json({ error: "internal_error" }, { status: 500 })
+      }
+      row = result
+    } catch {
       return Response.json({ error: "internal_error" }, { status: 500 })
     }
-    row = result
-  } catch {
-    return Response.json({ error: "internal_error" }, { status: 500 })
-  }
 
-  // 5. Rate limit check
-  if (row.count > 20) {
-    return Response.json({ error: "rate_limit_exceeded", remaining: 0 }, { status: 429 })
-  }
+    if (row.count > 20) {
+      return Response.json({ error: "rate_limit_exceeded", remaining: 0 }, { status: 429 })
+    }
 
-  // 6. Remaining count
-  const remaining = 20 - row.count
+    remaining = 20 - row.count
+  }
 
   // 7. Fetch personaPrompt (direct uncached DB query — changes take effect immediately)
   let persona = "You are JV, a software engineer."
