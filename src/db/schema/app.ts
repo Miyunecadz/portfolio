@@ -8,6 +8,7 @@ import {
   uuid,
   jsonb,
   index,
+  primaryKey,
 } from "drizzle-orm/pg-core"
 import { vector } from "drizzle-orm/pg-core"
 import { users } from "./auth"
@@ -209,5 +210,19 @@ export const siteSettings = pgTable("site_settings", {
   sectionOrdering: jsonb("section_ordering")
     .$type<Array<{ key: string; label: string; isVisible: boolean; sortOrder: number }>>()
     .default([]),
+  personaPrompt: text("persona_prompt"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
+
+// ─── AI RATE LIMITS ────────────────────────────────────────────────────────
+// Tracks per-IP daily message counts for the "Ask JV" chat widget.
+// Composite PK (ip, date) enables atomic upsert — no race conditions.
+export const aiRateLimits = pgTable(
+  "ai_rate_limits",
+  {
+    ip: text("ip").notNull(),
+    date: text("date").notNull(), // YYYY-MM-DD string
+    count: integer("count").notNull().default(0),
+  },
+  (table) => [primaryKey({ columns: [table.ip, table.date] })]
+)

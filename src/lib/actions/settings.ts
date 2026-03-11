@@ -1,10 +1,12 @@
 "use server"
 
-import { cookies } from "next/headers"
-import { revalidatePath } from "next/cache"
+import { cookies, headers } from "next/headers"
+import { revalidateTag, revalidatePath } from "next/cache"
+import { z } from "zod"
 import { db } from "@/db"
 import { siteSettings } from "@/db/schema/app"
 import { type ActionResult } from "@/schemas/content"
+import { auth } from "@/lib/auth"
 
 export async function updateMaintenanceMode(
   enabled: boolean
@@ -30,6 +32,36 @@ export async function updateMaintenanceMode(
       cookieStore.delete("maintenance-mode")
     }
 
+    revalidatePath("/admin/settings")
+    return { success: true, data: undefined }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error"
+    return { success: false, error: message }
+  }
+}
+
+export async function updatePersonaPrompt(data: {
+  personaPrompt: string
+}): Promise<ActionResult<void>> {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) return { success: false, error: "Unauthorized" }
+
+  const schema = z.object({ personaPrompt: z.string().max(10000) })
+  const parsed = schema.safeParse(data)
+  if (!parsed.success) {
+    return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input" }
+  }
+
+  try {
+    await db
+      .insert(siteSettings)
+      .values({ id: 1, personaPrompt: parsed.data.personaPrompt, updatedAt: new Date() })
+      .onConflictDoUpdate({
+        target: siteSettings.id,
+        set: { personaPrompt: parsed.data.personaPrompt, updatedAt: new Date() },
+      })
+
+    revalidateTag("site-settings", "default")
     revalidatePath("/admin/settings")
     return { success: true, data: undefined }
   } catch (err) {

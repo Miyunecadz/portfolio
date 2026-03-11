@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Card,
   CardContent,
@@ -13,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { updateMaintenanceMode, updateCalendlySettings } from "@/lib/actions/settings"
+import { updateMaintenanceMode, updateCalendlySettings, updatePersonaPrompt } from "@/lib/actions/settings"
 
 interface SettingsClientProps {
   initialSettings: {
@@ -21,6 +22,7 @@ interface SettingsClientProps {
     maintenanceMessage: string | null
     calendlyEnabled: boolean
     calendlyUrl: string | null
+    personaPrompt: string | null
   } | null
 }
 
@@ -36,6 +38,10 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
   )
   const [calendlySaving, setCalendlySaving] = useState(false)
   const [maintenanceSaving, setMaintenanceSaving] = useState(false)
+  const [personaPrompt, setPersonaPrompt] = useState(
+    initialSettings?.personaPrompt ?? ""
+  )
+  const [personaSaving, setPersonaSaving] = useState(false)
 
   async function handleMaintenanceToggle(checked: boolean) {
     setMaintenanceSaving(true)
@@ -51,6 +57,17 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
     } else {
       // Revert on failure
       setMaintenanceMode(!checked)
+      toast.error(result.error)
+    }
+  }
+
+  async function handlePersonaSave() {
+    setPersonaSaving(true)
+    const result = await updatePersonaPrompt({ personaPrompt })
+    setPersonaSaving(false)
+    if (result.success) {
+      toast.success("AI persona prompt saved.")
+    } else {
       toast.error(result.error)
     }
   }
@@ -128,6 +145,39 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
           </div>
           <Button onClick={handleCalendlySave} disabled={calendlySaving}>
             {calendlySaving ? "Saving..." : "Save"}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* AI Persona */}
+      <Card>
+        <CardHeader>
+          <CardTitle>AI Persona</CardTitle>
+          <CardDescription>
+            Write the persona prompt that the &ldquo;Ask JV&rdquo; chat widget uses to
+            speak as you. Changes take effect on the next chat request.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="persona-prompt">Persona Prompt</Label>
+            <Textarea
+              id="persona-prompt"
+              rows={8}
+              maxLength={10000}
+              placeholder="Describe yourself in first person. This is what the AI uses to speak as you. E.g. 'You are JV, a full-stack engineer based in...'"
+              value={personaPrompt}
+              onChange={(e) => setPersonaPrompt(e.target.value)}
+            />
+            <p className="text-xs text-muted-foreground text-right">
+              {personaPrompt.length.toLocaleString()} / 10,000 characters
+            </p>
+          </div>
+          <Button
+            onClick={handlePersonaSave}
+            disabled={personaSaving}
+          >
+            {personaSaving ? "Saving..." : "Save"}
           </Button>
         </CardContent>
       </Card>

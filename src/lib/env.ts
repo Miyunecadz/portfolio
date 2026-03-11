@@ -15,6 +15,7 @@ export const env = createEnv({
     LINKEDIN_CLIENT_SECRET: z.string().min(1),
     // Comma-separated emails — validated as non-empty string (not z.string().email())
     ADMIN_EMAIL: z.string().min(1),
+    GROQ_API_KEY: z.string().min(1),
     // Optional until 04-04 (contact form) and media library plans
     RESEND_API_KEY: z.string().min(1).optional(),
     RESEND_FROM_DOMAIN: z.string().min(1).optional(),
@@ -37,6 +38,7 @@ export const env = createEnv({
     LINKEDIN_CLIENT_ID: process.env.LINKEDIN_CLIENT_ID,
     LINKEDIN_CLIENT_SECRET: process.env.LINKEDIN_CLIENT_SECRET,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM_DOMAIN: process.env.RESEND_FROM_DOMAIN,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,

@@ -17,6 +17,7 @@ import { SkillsSection } from "@/components/public/skills-section"
 import { ReferencesSection } from "@/components/public/references-section"
 import { EducationSection } from "@/components/public/education-section"
 import { ContactSection } from "@/components/public/contact-section"
+import { ChatWidget } from "@/components/public/chat-widget"
 
 const SECTION_HEADINGS: Record<string, string> = {
   projects: "Projects",
@@ -150,6 +151,7 @@ export default async function PublicHomePage() {
           )
         })}
       </main>
+      <ChatWidget />
     </div>
   )
 }
